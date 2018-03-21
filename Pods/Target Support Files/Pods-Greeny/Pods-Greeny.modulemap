@@ -1,0 +1,6 @@
+framework module Pods_Greeny {
+  umbrella header "Pods-Greeny-umbrella.h"
+
+  export *
+  module * { export * }
+}

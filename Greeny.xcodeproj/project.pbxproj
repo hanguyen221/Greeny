@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		24EB2DE02220162D876EDA41 /* Pods_Greeny.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF96FAF963D9B6A8D7BC143C /* Pods_Greeny.framework */; };
+		A23922E32062157700D87CF0 /* Extension+UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23922E22062157700D87CF0 /* Extension+UIButton.swift */; };
 		FA1D98BD205E428B0001E159 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1D98BC205E428B0001E159 /* AppDelegate.swift */; };
 		FA1D98C4205E428B0001E159 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA1D98C3205E428B0001E159 /* Assets.xcassets */; };
 		FA1D98C7205E428B0001E159 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA1D98C5205E428B0001E159 /* LaunchScreen.storyboard */; };
@@ -24,6 +25,7 @@
 
 /* Begin PBXFileReference section */
 		53206DF6B4225E08345AE545 /* Pods-Greeny.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Greeny.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Greeny/Pods-Greeny.debug.xcconfig"; sourceTree = "<group>"; };
+		A23922E22062157700D87CF0 /* Extension+UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UIButton.swift"; sourceTree = "<group>"; };
 		AF96FAF963D9B6A8D7BC143C /* Pods_Greeny.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Greeny.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA1D98B9205E428B0001E159 /* Greeny.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Greeny.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA1D98BC205E428B0001E159 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -145,6 +147,7 @@
 				FA1D98E0205E46EE0001E159 /* Extension+UIColor.swift */,
 				FA1D98E2205E471A0001E159 /* Extension+UIView.swift */,
 				FA1D98E4205E47420001E159 /* Extension+UIImage.swift */,
+				A23922E22062157700D87CF0 /* Extension+UIButton.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -286,11 +289,15 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Greeny/Pods-Greeny-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/SideMenu/SideMenu.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SideMenu.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -304,6 +311,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A23922E32062157700D87CF0 /* Extension+UIButton.swift in Sources */,
 				FA1D98BD205E428B0001E159 /* AppDelegate.swift in Sources */,
 				FA1D98E3205E471A0001E159 /* Extension+UIView.swift in Sources */,
 				FA1D98E1205E46EE0001E159 /* Extension+UIColor.swift in Sources */,
@@ -444,10 +452,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = A4B27XWSTD;
+				DEVELOPMENT_TEAM = H2HK7VYTGX;
 				INFOPLIST_FILE = Greeny/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.Greeny;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tungdptry.Greeny;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -460,10 +468,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = A4B27XWSTD;
+				DEVELOPMENT_TEAM = H2HK7VYTGX;
 				INFOPLIST_FILE = Greeny/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.Greeny;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tungdptry.Greeny;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

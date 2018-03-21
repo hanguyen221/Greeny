@@ -9,4 +9,6 @@ target 'Greeny' do
 
   pod 'SideMenu', '~> 3.1.5'
   pod 'GoogleMaps', '~> 2.5.0'
+  pod 'Alamofire'
+  pod 'SwiftyJSON'
 end
