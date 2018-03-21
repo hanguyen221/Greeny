@@ -13,13 +13,13 @@
 		FA1D98C7205E428B0001E159 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA1D98C5205E428B0001E159 /* LaunchScreen.storyboard */; };
 		FA1D98D9205E43CF0001E159 /* MainController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1D98D8205E43CF0001E159 /* MainController.swift */; };
 		FA1D98DB205E43E50001E159 /* BaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1D98DA205E43E50001E159 /* BaseController.swift */; };
-		FA1D98DD205E446E0001E159 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1D98DC205E446E0001E159 /* SettingsController.swift */; };
 		FA1D98DF205E46590001E159 /* Const.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1D98DE205E46590001E159 /* Const.swift */; };
 		FA1D98E1205E46EE0001E159 /* Extension+UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1D98E0205E46EE0001E159 /* Extension+UIColor.swift */; };
 		FA1D98E3205E471A0001E159 /* Extension+UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1D98E2205E471A0001E159 /* Extension+UIView.swift */; };
 		FA1D98E5205E47420001E159 /* Extension+UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1D98E4205E47420001E159 /* Extension+UIImage.swift */; };
 		FA1D98E7205E47560001E159 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1D98E6205E47560001E159 /* Utils.swift */; };
 		FA1D98EA206025B50001E159 /* SideMenuRootController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1D98E9206025B50001E159 /* SideMenuRootController.swift */; };
+		FA1D98ED2061A7780001E159 /* SideMenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1D98EC2061A7780001E159 /* SideMenuCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,13 +32,13 @@
 		FA1D98C8205E428B0001E159 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FA1D98D8205E43CF0001E159 /* MainController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainController.swift; sourceTree = "<group>"; };
 		FA1D98DA205E43E50001E159 /* BaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseController.swift; sourceTree = "<group>"; };
-		FA1D98DC205E446E0001E159 /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
 		FA1D98DE205E46590001E159 /* Const.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Const.swift; sourceTree = "<group>"; };
 		FA1D98E0205E46EE0001E159 /* Extension+UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UIColor.swift"; sourceTree = "<group>"; };
 		FA1D98E2205E471A0001E159 /* Extension+UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UIView.swift"; sourceTree = "<group>"; };
 		FA1D98E4205E47420001E159 /* Extension+UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UIImage.swift"; sourceTree = "<group>"; };
 		FA1D98E6205E47560001E159 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		FA1D98E9206025B50001E159 /* SideMenuRootController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuRootController.swift; sourceTree = "<group>"; };
+		FA1D98EC2061A7780001E159 /* SideMenuCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuCell.swift; sourceTree = "<group>"; };
 		FDDE3A062A59FAA62608CE05 /* Pods-Greeny.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Greeny.release.xcconfig"; path = "Pods/Target Support Files/Pods-Greeny/Pods-Greeny.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -119,7 +119,6 @@
 			children = (
 				FA1D98D8205E43CF0001E159 /* MainController.swift */,
 				FA1D98DA205E43E50001E159 /* BaseController.swift */,
-				FA1D98DC205E446E0001E159 /* SettingsController.swift */,
 				FA1D98E9206025B50001E159 /* SideMenuRootController.swift */,
 			);
 			path = Controllers;
@@ -128,6 +127,7 @@
 		FA1D98D4205E43420001E159 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				FA1D98EB2061A75B0001E159 /* Cells */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -163,6 +163,14 @@
 			children = (
 			);
 			path = Storyboards;
+			sourceTree = "<group>";
+		};
+		FA1D98EB2061A75B0001E159 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				FA1D98EC2061A7780001E159 /* SideMenuCell.swift */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -259,9 +267,12 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Greeny/Pods-Greeny-resources.sh",
+				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -294,9 +305,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA1D98BD205E428B0001E159 /* AppDelegate.swift in Sources */,
-				FA1D98DD205E446E0001E159 /* SettingsController.swift in Sources */,
 				FA1D98E3205E471A0001E159 /* Extension+UIView.swift in Sources */,
 				FA1D98E1205E46EE0001E159 /* Extension+UIColor.swift in Sources */,
+				FA1D98ED2061A7780001E159 /* SideMenuCell.swift in Sources */,
 				FA1D98D9205E43CF0001E159 /* MainController.swift in Sources */,
 				FA1D98E7205E47560001E159 /* Utils.swift in Sources */,
 				FA1D98DB205E43E50001E159 /* BaseController.swift in Sources */,

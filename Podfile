@@ -7,6 +7,6 @@ target 'Greeny' do
 
   # Pods for Greeny
 
-  pod 'SideMenu'
-
+  pod 'SideMenu', '~> 3.1.5'
+  pod 'GoogleMaps', '~> 2.5.0'
 end
