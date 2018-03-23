@@ -33,6 +33,27 @@ class MainController: BaseController {
         ("Nguồn 2", 21.006141, 105.843774)
     ]
     
+    // n0->4->5->9->8->n0->2->0->n1->6->7->3->n1->1
+    let paths: [(Int, Int, Int)] = [
+        (1, 0, 4),
+        (0, 4, 5),
+        (0, 5, 9),
+        (0, 9, 8),
+        (2, 8, 0),
+        (1, 0, 2),
+        (0, 2, 0),
+        (2, 0, 1),
+        (1, 1, 6),
+        (0, 6, 7),
+        (0, 7, 3),
+        (2, 3, 1),
+        (1, 1, 1)
+    ]
+    
+    var currentIndex = 0
+    
+    var line: GMSPolyline = GMSPolyline()
+    
     let hamburgerButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(named: "ic_hamburger")?.alpha(0.8), for: .normal)
@@ -42,10 +63,15 @@ class MainController: BaseController {
     }()
     
     let nextButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(UIImage(named: "ic_next")?.alpha(0.8), for: .normal)
-//        button.tintColor = .white
-        button.addTarget(self, action: #selector(showSideMenu), for: .touchUpInside)
+        let button = UIButton(type: .custom)
+        var img = UIImage(named: "ic_next")?.alpha(0.8)
+        img = Utils.resizeImage(image: img!, targetSize: CGSize(width: (img?.size.width)! * 0.7, height: (img?.size.height)! * 0.7))
+        button.setImage(img, for: .normal)
+        button.contentMode = .scaleAspectFit
+        button.setBackgroundColor(color: UIColor.init(r: 255, g: 255, b: 255, a: 0.4), forState: .normal)
+        button.setBackgroundColor(color: UIColor.init(r: 255, g: 255, b: 255, a: 0.95), forState: .highlighted)
+        button.tintColor = .white
+        button.addTarget(self, action: #selector(nextPath), for: .touchUpInside)
         return button
     }()
     
@@ -58,17 +84,19 @@ class MainController: BaseController {
         button.setBackgroundColor(color: UIColor.init(r: 255, g: 255, b: 255, a: 0.4), forState: .normal)
         button.setBackgroundColor(color: UIColor.init(r: 255, g: 255, b: 255, a: 0.95), forState: .highlighted)
         button.tintColor = .white
-//        button.addTarget(self, action: #selector(showSideMenu), for: .touchUpInside)
+        button.addTarget(self, action: #selector(prevPath), for: .touchUpInside)
         return button
     }()
+    
+    var mapView: GMSMapView?
     
     override func loadView() {
         super.loadView()
         let camera = GMSCameraPosition.camera(withLatitude: waterLocations[0].1, longitude: waterLocations[0].2, zoom: 17)
-        let mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
+        mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
         view = mapView
-        setupMarkers(with: mapView)
-        initDirections(mapView: mapView)
+        setupMarkers(with: mapView!)
+        initDirections(mapView: mapView!)
     }
     
     override func viewDidLoad() {
@@ -120,6 +148,20 @@ class MainController: BaseController {
         present(SideMenuManager.default.menuLeftNavigationController!, animated: true, completion: nil)
     }
     
+    @objc func nextPath() {
+        if currentIndex < paths.count {
+            currentIndex += 1
+        }
+        drawPath(mapView: mapView!, index: currentIndex)
+    }
+    
+    @objc func prevPath() {
+        if currentIndex > 0 {
+            currentIndex -= 1
+        }
+        drawPath(mapView: mapView!, index: currentIndex)
+    }
+    
     func setupMarkers(with mapView: GMSMapView) {
         for tree in treeLocations {
             let marker = GMSMarker()
@@ -147,35 +189,54 @@ class MainController: BaseController {
         let origin = "\(start.coordinate.latitude),\(start.coordinate.longitude)"
         let destination = "\(destination.coordinate.latitude),\(destination.coordinate.longitude)"
         let url = "https://maps.googleapis.com/maps/api/directions/json?origin=\(origin)&destination=\(destination)&mode=walking"
-        var line: GMSPolyline = GMSPolyline()
         Alamofire.request(url).responseJSON { response in
+            self.line.map = nil
             let json = try! JSON(data: response.data!)
             let routes = json["routes"].arrayValue
             for route in routes {
                 let routeOverviewPolyline = route["overview_polyline"].dictionary
                 let points = routeOverviewPolyline?["points"]?.stringValue
                 let path = GMSPath.init(fromEncodedPath: points!)
-                line = GMSPolyline(path: path)
-                line.path = path
-                line.strokeWidth = 3
-                line.strokeColor = UIColor.blue
-                line.map = mapView
+                self.line = GMSPolyline(path: path)
+                self.line.path = path
+                self.line.strokeWidth = 3
+                self.line.strokeColor = UIColor.blue
+                self.line.map = mapView
             }
         }
     }
     
-    func initDirections(mapView: GMSMapView) {
-//        for i in 0 ..< treeLocations.count - 1 {
-//            let start = CLLocation(latitude: treeLocations[i].1, longitude: treeLocations[i].2)
-//            let end = CLLocation(latitude: treeLocations[i + 1].1, longitude: treeLocations[i + 1].2)
-//            drawDirection(mapView: mapView, start: start, destination: end)
-//        }
-        let firstTreeLocation = CLLocation(latitude: treeLocations[0].1, longitude: treeLocations[0].2)
-        let firstWaterLocation = CLLocation(latitude: waterLocations[0].1, longitude: waterLocations[0].2)
-        drawDirection(mapView: mapView, start: firstTreeLocation, destination: firstWaterLocation)
-        
+    func drawPath(mapView: GMSMapView, index: Int) {
+        let path = paths[index]
+        if path.0 == 0 {
+            drawDirection(mapView: mapView, startTreeIndex: path.1, endTreeIndex: path.2)
+        } else if path.0 == 1 {
+            drawDirectionWaterToTree(mapView: mapView, waterIndex: path.1, treeIndex: path.2)
+        } else {
+            drawDirectionTreeToWater(mapView: mapView, treeIndex: path.1, waterIndex: path.2)
+        }
     }
     
+    func initDirections(mapView: GMSMapView) {
+        drawPath(mapView: mapView, index: 0)
+    }
     
+    func drawDirection(mapView: GMSMapView, startTreeIndex: Int, endTreeIndex: Int) {
+        let firstTreeLocation = CLLocation(latitude: treeLocations[startTreeIndex].1, longitude: treeLocations[startTreeIndex].2)
+        let secondTreeLocation = CLLocation(latitude: treeLocations[endTreeIndex].1, longitude: treeLocations[endTreeIndex].2)
+        drawDirection(mapView: mapView, start: firstTreeLocation, destination: secondTreeLocation)
+    }
+    
+    func drawDirectionTreeToWater(mapView: GMSMapView, treeIndex: Int, waterIndex: Int) {
+        let treeLocation = CLLocation(latitude: treeLocations[treeIndex].1, longitude: treeLocations[treeIndex].2)
+        let waterLocation = CLLocation(latitude: waterLocations[waterIndex].1, longitude: waterLocations[waterIndex].2)
+        drawDirection(mapView: mapView, start: treeLocation, destination: waterLocation)
+    }
+    
+    func drawDirectionWaterToTree(mapView: GMSMapView, waterIndex: Int, treeIndex: Int) {
+        let treeLocation = CLLocation(latitude: treeLocations[treeIndex].1, longitude: treeLocations[treeIndex].2)
+        let waterLocation = CLLocation(latitude: waterLocations[waterIndex].1, longitude: waterLocations[waterIndex].2)
+        drawDirection(mapView: mapView, start: waterLocation, destination: treeLocation)
+    }
     
 }
