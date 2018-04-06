@@ -23,6 +23,8 @@
 		FA1D98EF20620CB20001E159 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA1D98EE20620CB20001E159 /* Assets.xcassets */; };
 		FA1D98F1206212430001E159 /* ProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1D98F0206212430001E159 /* ProfileController.swift */; };
 		FA1D98F32062147F0001E159 /* SideMenuOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1D98F22062147F0001E159 /* SideMenuOption.swift */; };
+		FA5F91862064B30F0003EF77 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5F91852064B30F0003EF77 /* LoginController.swift */; };
+		FA5F91892064B3410003EF77 /* PaddedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5F91882064B3410003EF77 /* PaddedTextField.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +47,8 @@
 		FA1D98EE20620CB20001E159 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FA1D98F0206212430001E159 /* ProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileController.swift; sourceTree = "<group>"; };
 		FA1D98F22062147F0001E159 /* SideMenuOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuOption.swift; sourceTree = "<group>"; };
+		FA5F91852064B30F0003EF77 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
+		FA5F91882064B3410003EF77 /* PaddedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddedTextField.swift; sourceTree = "<group>"; };
 		FDDE3A062A59FAA62608CE05 /* Pods-Greeny.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Greeny.release.xcconfig"; path = "Pods/Target Support Files/Pods-Greeny/Pods-Greeny.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -127,6 +131,7 @@
 				FA1D98DA205E43E50001E159 /* BaseController.swift */,
 				FA1D98E9206025B50001E159 /* SideMenuRootController.swift */,
 				FA1D98F0206212430001E159 /* ProfileController.swift */,
+				FA5F91852064B30F0003EF77 /* LoginController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -134,6 +139,7 @@
 		FA1D98D4205E43420001E159 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				FA5F91872064B3330003EF77 /* CustomViews */,
 				FA1D98EB2061A75B0001E159 /* Cells */,
 			);
 			path = Views;
@@ -180,6 +186,14 @@
 				FA1D98EC2061A7780001E159 /* SideMenuCell.swift */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		FA5F91872064B3330003EF77 /* CustomViews */ = {
+			isa = PBXGroup;
+			children = (
+				FA5F91882064B3410003EF77 /* PaddedTextField.swift */,
+			);
+			path = CustomViews;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -318,6 +332,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A23922E32062157700D87CF0 /* Extension+UIButton.swift in Sources */,
+				FA5F91892064B3410003EF77 /* PaddedTextField.swift in Sources */,
 				FA1D98BD205E428B0001E159 /* AppDelegate.swift in Sources */,
 				FA1D98E3205E471A0001E159 /* Extension+UIView.swift in Sources */,
 				FA1D98F32062147F0001E159 /* SideMenuOption.swift in Sources */,
@@ -330,6 +345,7 @@
 				FA1D98E5205E47420001E159 /* Extension+UIImage.swift in Sources */,
 				FA1D98DF205E46590001E159 /* Const.swift in Sources */,
 				FA1D98EA206025B50001E159 /* SideMenuRootController.swift in Sources */,
+				FA5F91862064B30F0003EF77 /* LoginController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -15,17 +15,17 @@ import SwiftyJSON
 
 class MainController: BaseController {
     
-    let treeLocations: [(String, Double, Double)] = [
-        ("Cây 1", 21.006274, 105.842803),
-        ("Cây 2", 21.006985, 105.844005),
-        ("Cây 3", 21.005678, 105.8411293),
-        ("Cây 4", 21.005693, 105.844616),
-        ("Cây 5", 21.003419, 105.843736),
-        ("Cây 6", 21.004141, 105.843951),
-        ("Cây 7", 21.005112, 105.843629),
-        ("Cây 8", 21.005112, 105.845174),
-        ("Cây 9", 21.004742, 105.841955),
-        ("Cây 10", 21.004531, 105.843050)
+    let treeLocations: [(String, Double, Double, String)] = [
+        ("Cây 1", 21.006274, 105.842803, "Can 1 lit nuoc"),
+        ("Cây 2", 21.006985, 105.844005, "Can 6 lit nuoc"),
+        ("Cây 3", 21.005678, 105.8411293, "Can 3 lit nuoc"),
+        ("Cây 4", 21.005693, 105.844616, "Can 1 lit nuoc"),
+        ("Cây 5", 21.003419, 105.843736, "Can 1 lit nuoc"),
+        ("Cây 6", 21.004141, 105.843951, "Can 5 lit nuoc"),
+        ("Cây 7", 21.005112, 105.843629, "Can 2 lit nuoc"),
+        ("Cây 8", 21.005112, 105.845174, "Can 3 lit nuoc"),
+        ("Cây 9", 21.004742, 105.841955, "Can 4 lit nuoc"),
+        ("Cây 10", 21.004531, 105.843050, "Can 1 lit nuoc")
     ]
     
     let waterLocations: [(String, Double, Double)] = [
@@ -54,39 +54,45 @@ class MainController: BaseController {
     
     var line: GMSPolyline = GMSPolyline()
     
+    var treeMarkers = [GMSMarker]()
+    var waterMarkers = [GMSMarker]()
+    
     let hamburgerButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(named: "ic_hamburger")?.alpha(0.8), for: .normal)
-        button.tintColor = .white
+        button.tintColor = .blue
         button.addTarget(self, action: #selector(showSideMenu), for: .touchUpInside)
         return button
     }()
     
-    let nextButton: UIButton = {
+    lazy var nextButton: UIButton = {
         let button = UIButton(type: .custom)
         var img = UIImage(named: "ic_next")?.alpha(0.8)
         img = Utils.resizeImage(image: img!, targetSize: CGSize(width: (img?.size.width)! * 0.7, height: (img?.size.height)! * 0.7))
         button.setImage(img, for: .normal)
-        button.contentMode = .scaleAspectFit
-        button.setBackgroundColor(color: UIColor.init(r: 255, g: 255, b: 255, a: 0.4), forState: .normal)
-        button.setBackgroundColor(color: UIColor.init(r: 255, g: 255, b: 255, a: 0.95), forState: .highlighted)
-        button.tintColor = .white
+        styleButton(button: button)
         button.addTarget(self, action: #selector(nextPath), for: .touchUpInside)
         return button
     }()
     
-    let prevButton: UIButton = {
+    lazy var prevButton: UIButton = {
         let button = UIButton(type: .custom)
         var img = UIImage(named: "ic_prev")?.alpha(0.8)
         img = Utils.resizeImage(image: img!, targetSize: CGSize(width: (img?.size.width)! * 0.7, height: (img?.size.height)! * 0.7))
         button.setImage(img, for: .normal)
-        button.contentMode = .scaleAspectFit
-        button.setBackgroundColor(color: UIColor.init(r: 255, g: 255, b: 255, a: 0.4), forState: .normal)
-        button.setBackgroundColor(color: UIColor.init(r: 255, g: 255, b: 255, a: 0.95), forState: .highlighted)
-        button.tintColor = .white
+        styleButton(button: button)
         button.addTarget(self, action: #selector(prevPath), for: .touchUpInside)
         return button
     }()
+    
+    func styleButton(button: UIButton) {
+        button.contentMode = .scaleAspectFit
+        button.setBackgroundColor(color: UIColor.init(r: 255, g: 255, b: 255, a: 1), forState: .normal)
+        button.setBackgroundColor(color: UIColor.init(r: 255, g: 255, b: 255, a: 0.7), forState: .highlighted)
+        button.tintColor = .white
+        button.layer.cornerRadius = 24
+        button.layer.masksToBounds = true
+    }
     
     var mapView: GMSMapView?
     
@@ -149,7 +155,7 @@ class MainController: BaseController {
     }
     
     @objc func nextPath() {
-        if currentIndex < paths.count {
+        if currentIndex < paths.count - 1 {
             currentIndex += 1
         }
         drawPath(mapView: mapView!, index: currentIndex)
@@ -168,7 +174,9 @@ class MainController: BaseController {
             marker.position = CLLocationCoordinate2DMake(tree.1, tree.2)
             marker.title = tree.0
             marker.icon = UIImage(named: "ic_tree_green")
+            marker.snippet = tree.3
             marker.map = mapView
+            treeMarkers.append(marker)
         }
         
         for (index,water) in waterLocations.enumerated() {
@@ -182,6 +190,7 @@ class MainController: BaseController {
             if index == 0 {
                 mapView.selectedMarker = marker
             }
+            waterMarkers.append(marker)
         }
     }
     
@@ -225,18 +234,27 @@ class MainController: BaseController {
         let firstTreeLocation = CLLocation(latitude: treeLocations[startTreeIndex].1, longitude: treeLocations[startTreeIndex].2)
         let secondTreeLocation = CLLocation(latitude: treeLocations[endTreeIndex].1, longitude: treeLocations[endTreeIndex].2)
         drawDirection(mapView: mapView, start: firstTreeLocation, destination: secondTreeLocation)
+        mapView.selectedMarker = treeMarkers[endTreeIndex]
+        let camera = GMSCameraPosition.camera(withLatitude: treeLocations[endTreeIndex].1, longitude:  treeLocations[endTreeIndex].2 , zoom: 17)
+        mapView.animate(to: camera)
     }
     
     func drawDirectionTreeToWater(mapView: GMSMapView, treeIndex: Int, waterIndex: Int) {
         let treeLocation = CLLocation(latitude: treeLocations[treeIndex].1, longitude: treeLocations[treeIndex].2)
         let waterLocation = CLLocation(latitude: waterLocations[waterIndex].1, longitude: waterLocations[waterIndex].2)
         drawDirection(mapView: mapView, start: treeLocation, destination: waterLocation)
+        mapView.selectedMarker = waterMarkers[waterIndex]
+        let camera = GMSCameraPosition.camera(withLatitude: waterLocations[waterIndex].1, longitude:  waterLocations[waterIndex].2, zoom: 17)
+        mapView.animate(to: camera)
     }
     
     func drawDirectionWaterToTree(mapView: GMSMapView, waterIndex: Int, treeIndex: Int) {
         let treeLocation = CLLocation(latitude: treeLocations[treeIndex].1, longitude: treeLocations[treeIndex].2)
         let waterLocation = CLLocation(latitude: waterLocations[waterIndex].1, longitude: waterLocations[waterIndex].2)
         drawDirection(mapView: mapView, start: waterLocation, destination: treeLocation)
+        mapView.selectedMarker = treeMarkers[treeIndex]
+        let camera = GMSCameraPosition.camera(withLatitude: treeLocations[treeIndex].1, longitude: treeLocations[treeIndex].2, zoom: 17)
+        mapView.animate(to: camera)
     }
     
 }
