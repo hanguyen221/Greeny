@@ -12,7 +12,7 @@ class Const {
     
     public static let APP_NAME = "Greeny"
     
-    public static let BLUE = UIColor(r: 60, g: 190, b: 201)
+    public static let BLUE = UIColor(r: 0, g: 104, b: 139)
     public static let MEDIUM_BLUE = UIColor(r: 87, g: 198, b: 209)
     public static let LIGHT_BLUE = UIColor(r: 120, g: 222, b: 232)
     public static let SUPER_LIGHT_BLUE = UIColor(r: 183, g: 241, b: 247)
