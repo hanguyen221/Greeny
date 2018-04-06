@@ -12,20 +12,21 @@ import GoogleMaps
 import Alamofire
 import SwiftyJSON
 
-
-class MainController: BaseController {
+class MainController: BaseController, GMSMapViewDelegate {
+    
+    var locationManager = CLLocationManager()
     
     let trees: [ModelTree] = [
-        ModelTree(name: "Cây 1", lat: 21.006274, lng: 105.842803, desc: "Can 1 lit nuoc", icon: UIImage(named: "ic_tree_red")),
-        ModelTree(name: "Cây 2", lat: 21.006985, lng: 105.844005, desc: "Can 6 lit nuoc", icon: UIImage(named: "ic_tree_red")),
-        ModelTree(name: "Cây 3", lat: 21.005678, lng: 105.8411293,desc:  "Can 3 lit nuoc", icon: UIImage(named: "ic_tree_red")),
-        ModelTree(name: "Cây 4", lat: 21.005693, lng: 105.844616, desc: "Can 1 lit nuoc", icon: UIImage(named: "ic_tree_red")),
-        ModelTree(name: "Cây 5", lat: 21.003419, lng: 105.843736, desc: "Can 1 lit nuoc", icon: UIImage(named: "ic_tree_red")),
-        ModelTree(name: "Cây 6", lat: 21.004141, lng: 105.843951, desc: "Can 5 lit nuoc", icon: UIImage(named: "ic_tree_red")),
-        ModelTree(name: "Cây 7", lat: 21.005112, lng: 105.843629, desc: "Can 2 lit nuoc", icon: UIImage(named: "ic_tree_red")),
-        ModelTree(name: "Cây 8", lat: 21.005112, lng: 105.845174, desc: "Can 3 lit nuoc", icon: UIImage(named: "ic_tree_red")),
-        ModelTree(name: "Cây 9", lat: 21.004742, lng: 105.841955, desc: "Can 4 lit nuoc", icon: UIImage(named: "ic_tree_red")),
-        ModelTree(name: "Cây 10",lat: 21.004531,lng:  105.843050, desc:  "Can 1 lit nuoc", icon: UIImage(named: "ic_tree_red"))
+        ModelTree(name: "Cây 1", lat: 21.006274, lng: 105.842803, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red")),
+        ModelTree(name: "Cây 2", lat: 21.006985, lng: 105.844005, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red")),
+        ModelTree(name: "Cây 3", lat: 21.005678, lng: 105.8411293,desc:  "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red")),
+        ModelTree(name: "Cây 4", lat: 21.005693, lng: 105.844616, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_green"), needWater: false),
+        ModelTree(name: "Cây 5", lat: 21.003419, lng: 105.843736, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red")),
+        ModelTree(name: "Cây 6", lat: 21.004141, lng: 105.843951, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red")),
+        ModelTree(name: "Cây 7", lat: 21.005112, lng: 105.843629, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_green"), needWater: false),
+        ModelTree(name: "Cây 8", lat: 21.005112, lng: 105.845174, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red")),
+        ModelTree(name: "Cây 9", lat: 21.004742, lng: 105.841955, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_green"), needWater: false),
+        ModelTree(name: "Cây 10",lat: 21.004531,lng:  105.843050, desc:  "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red"))
     ]
     
     let waterLocations: [ModelWater] = [
@@ -115,6 +116,10 @@ class MainController: BaseController {
         setupHamburgerButton()
         setupNextButton()
         setupPrevButton()
+        
+        mapView?.delegate = self
+        mapView?.isMyLocationEnabled = true
+        
     }
     
     func setupHamburgerButton() {
@@ -243,4 +248,34 @@ class MainController: BaseController {
         mapView.animate(to: camera)
     }
     
+    func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
+        guard let index = treeMarkers.index(of: marker) else {
+            return false
+        }
+        let tree = trees[index]
+        var information: String = "Cây đã đủ nước, không cần tưới"
+        if (tree.needWater) {
+            information = "\(tree.name) - \(tree.desc) \n Tưới cây này?"
+        }
+        let alert = UIAlertController(title: "Xác nhận", message: information, preferredStyle: UIAlertControllerStyle.alert)
+        if (tree.needWater) {
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { (action) in
+                marker.icon = UIImage(named: "ic_tree_green")!
+            }))
+            alert.addAction(UIAlertAction(title: "Huỷ", style: UIAlertActionStyle.cancel, handler: nil))
+        } else {
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
+        }
+        self.present(alert, animated: true, completion: nil)
+        return true
+    }
+    
 }
+
+
+
+
+
+
+
+
