@@ -215,18 +215,6 @@ class MainController: BaseController {
         }
     }
     
-//    func drawPath(mapView: GMSMapView, index: Int) {
-//        let path = paths[index]
-//        if path.0 == 0 {
-//            drawDirection(mapView: mapView, startTreeIndex: path.1, endTreeIndex: path.2)
-//            drawDirection(mapView: mapView, start: <#T##CLLocation#>, destination: <#T##CLLocation#>)
-//        } else if path.0 == 1 {
-//            drawDirectionWaterToTree(mapView: mapView, waterIndex: path.1, treeIndex: path.2)
-//        } else {
-//            drawDirectionTreeToWater(mapView: mapView, treeIndex: path.1, waterIndex: path.2)
-//        }
-//    }
-    
     func initDirections(mapView: GMSMapView) {
         drawDirection(mapView: mapView, pathIndex: 0)
     }
@@ -254,32 +242,5 @@ class MainController: BaseController {
         let camera = GMSCameraPosition.camera(withLatitude: endObj!.lat, longitude: endObj!.lng , zoom: 17)
         mapView.animate(to: camera)
     }
-    
-//    func drawDirection(mapView: GMSMapView, startObject: ModelObject, endObject: ModelObject) {
-//        let startLoc = CLLocation(latitude: startObject.lat, longitude: startObject.lng)
-//        let endLoc = CLLocation(latitude: endObject.lat, longitude: endObject.lng)
-//        drawDirection(mapView: mapView, start: startLoc, destination: endLoc)
-//        mapView.selectedMarker = treeMarkers[endTreeIndex]
-//        let camera = GMSCameraPosition.camera(withLatitude: trees[endTreeIndex].lat, longitude:  trees[endTreeIndex].lng , zoom: 17)
-//        mapView.animate(to: camera)
-//    }
-    
-//    func drawDirectionTreeToWater(mapView: GMSMapView, treeIndex: Int, waterIndex: Int) {
-//        let treeLocation = CLLocation(latitude: trees[treeIndex].lat, longitude: trees[treeIndex].lng)
-//        let waterLocation = CLLocation(latitude: waterLocations[waterIndex].lat, longitude: waterLocations[waterIndex].lng)
-//        drawDirection(mapView: mapView, start: treeLocation, destination: waterLocation)
-//        mapView.selectedMarker = waterMarkers[waterIndex]
-//        let camera = GMSCameraPosition.camera(withLatitude: waterLocations[waterIndex].lat, longitude:  waterLocations[waterIndex].lng, zoom: 17)
-//        mapView.animate(to: camera)
-//    }
-//
-//    func drawDirectionWaterToTree(mapView: GMSMapView, waterIndex: Int, treeIndex: Int) {
-//        let treeLocation = CLLocation(latitude: trees[treeIndex].lat, longitude: trees[treeIndex].lng)
-//        let waterLocation = CLLocation(latitude: waterLocations[waterIndex].lat, longitude: waterLocations[waterIndex].lng)
-//        drawDirection(mapView: mapView, start: waterLocation, destination: treeLocation)
-//        mapView.selectedMarker = treeMarkers[treeIndex]
-//        let camera = GMSCameraPosition.camera(withLatitude: trees[treeIndex].lat, longitude: trees[treeIndex].lng, zoom: 17)
-//        mapView.animate(to: camera)
-//    }
     
 }
