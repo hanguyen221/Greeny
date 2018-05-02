@@ -2,11 +2,11 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "icons8-plumbing-48.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
+      "filename" : "icons8-fountain-96.png",
       "scale" : "2x"
     },
     {

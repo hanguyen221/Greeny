@@ -12,25 +12,26 @@ import GoogleMaps
 import Alamofire
 import SwiftyJSON
 
-
-class MainController: BaseController {
+class MainController: BaseController, GMSMapViewDelegate {
     
-    let treeLocations: [(String, Double, Double)] = [
-        ("Cây 1", 21.006274, 105.842803),
-        ("Cây 2", 21.006985, 105.844005),
-        ("Cây 3", 21.005678, 105.8411293),
-        ("Cây 4", 21.005693, 105.844616),
-        ("Cây 5", 21.003419, 105.843736),
-        ("Cây 6", 21.004141, 105.843951),
-        ("Cây 7", 21.005112, 105.843629),
-        ("Cây 8", 21.005112, 105.845174),
-        ("Cây 9", 21.004742, 105.841955),
-        ("Cây 10", 21.004531, 105.843050)
+    var locationManager = CLLocationManager()
+    
+    let trees: [ModelTree] = [
+        ModelTree(name: "Cây 1", lat: 21.006274, lng: 105.842803, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red")),
+        ModelTree(name: "Cây 2", lat: 21.006985, lng: 105.844005, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red")),
+        ModelTree(name: "Cây 3", lat: 21.005678, lng: 105.8411293,desc:  "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red")),
+        ModelTree(name: "Cây 4", lat: 21.005693, lng: 105.844616, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_green"), needWater: false),
+        ModelTree(name: "Cây 5", lat: 21.003419, lng: 105.843736, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red")),
+        ModelTree(name: "Cây 6", lat: 21.004141, lng: 105.843951, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red")),
+        ModelTree(name: "Cây 7", lat: 21.005112, lng: 105.843629, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_green"), needWater: false),
+        ModelTree(name: "Cây 8", lat: 21.005112, lng: 105.845174, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red")),
+        ModelTree(name: "Cây 9", lat: 21.004742, lng: 105.841955, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_green"), needWater: false),
+        ModelTree(name: "Cây 10",lat: 21.004531,lng:  105.843050, desc:  "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red"))
     ]
     
-    let waterLocations: [(String, Double, Double)] = [
-        ("Nguồn 1", 21.004017, 105.842283),
-        ("Nguồn 2", 21.006141, 105.843774)
+    let waterLocations: [ModelWater] = [
+        ModelWater(name: "Nguồn 1", lat: 21.004017, lng: 105.842283),
+        ModelWater(name: "Nguồn 2", lat: 21.006141, lng: 105.843774)
     ]
     
     // n0->4->5->9->8->n0->2->0->n1->6->7->3->n1->1
@@ -54,45 +55,51 @@ class MainController: BaseController {
     
     var line: GMSPolyline = GMSPolyline()
     
+    var treeMarkers = [GMSMarker]()
+    var waterMarkers = [GMSMarker]()
+    
     let hamburgerButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(named: "ic_hamburger")?.alpha(0.8), for: .normal)
-        button.tintColor = .white
+        button.setImage(UIImage(named: "ic_hamburger")?.alpha(0.9), for: .normal)
+        button.tintColor = UIColor(r: 0, g: 0, b: 0, a: 0.8)
         button.addTarget(self, action: #selector(showSideMenu), for: .touchUpInside)
         return button
     }()
     
-    let nextButton: UIButton = {
+    lazy var nextButton: UIButton = {
         let button = UIButton(type: .custom)
         var img = UIImage(named: "ic_next")?.alpha(0.8)
         img = Utils.resizeImage(image: img!, targetSize: CGSize(width: (img?.size.width)! * 0.7, height: (img?.size.height)! * 0.7))
         button.setImage(img, for: .normal)
-        button.contentMode = .scaleAspectFit
-        button.setBackgroundColor(color: UIColor.init(r: 255, g: 255, b: 255, a: 0.4), forState: .normal)
-        button.setBackgroundColor(color: UIColor.init(r: 255, g: 255, b: 255, a: 0.95), forState: .highlighted)
-        button.tintColor = .white
+        styleButton(button: button)
         button.addTarget(self, action: #selector(nextPath), for: .touchUpInside)
         return button
     }()
     
-    let prevButton: UIButton = {
+    lazy var prevButton: UIButton = {
         let button = UIButton(type: .custom)
         var img = UIImage(named: "ic_prev")?.alpha(0.8)
         img = Utils.resizeImage(image: img!, targetSize: CGSize(width: (img?.size.width)! * 0.7, height: (img?.size.height)! * 0.7))
         button.setImage(img, for: .normal)
-        button.contentMode = .scaleAspectFit
-        button.setBackgroundColor(color: UIColor.init(r: 255, g: 255, b: 255, a: 0.4), forState: .normal)
-        button.setBackgroundColor(color: UIColor.init(r: 255, g: 255, b: 255, a: 0.95), forState: .highlighted)
-        button.tintColor = .white
+        styleButton(button: button)
         button.addTarget(self, action: #selector(prevPath), for: .touchUpInside)
         return button
     }()
+    
+    func styleButton(button: UIButton) {
+        button.contentMode = .scaleAspectFit
+        button.setBackgroundColor(color: UIColor.init(r: 255, g: 255, b: 255, a: 1), forState: .normal)
+        button.setBackgroundColor(color: UIColor.init(r: 255, g: 255, b: 255, a: 0.7), forState: .highlighted)
+        button.tintColor = UIColor(r: 0, g: 0, b: 0, a: 0.8)
+        button.layer.cornerRadius = 24
+        button.layer.masksToBounds = true
+    }
     
     var mapView: GMSMapView?
     
     override func loadView() {
         super.loadView()
-        let camera = GMSCameraPosition.camera(withLatitude: waterLocations[0].1, longitude: waterLocations[0].2, zoom: 17)
+        let camera = GMSCameraPosition.camera(withLatitude: waterLocations[0].lat, longitude: waterLocations[0].lng, zoom: 17)
         mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
         view = mapView
         setupMarkers(with: mapView!)
@@ -109,6 +116,10 @@ class MainController: BaseController {
         setupHamburgerButton()
         setupNextButton()
         setupPrevButton()
+        
+        mapView?.delegate = self
+        mapView?.isMyLocationEnabled = true
+        
     }
     
     func setupHamburgerButton() {
@@ -149,39 +160,42 @@ class MainController: BaseController {
     }
     
     @objc func nextPath() {
-        if currentIndex < paths.count {
+        if currentIndex < paths.count - 1 {
             currentIndex += 1
         }
-        drawPath(mapView: mapView!, index: currentIndex)
+        drawDirection(mapView: mapView!, pathIndex: currentIndex)
     }
     
     @objc func prevPath() {
         if currentIndex > 0 {
             currentIndex -= 1
         }
-        drawPath(mapView: mapView!, index: currentIndex)
+        drawDirection(mapView: mapView!, pathIndex: currentIndex)
     }
     
     func setupMarkers(with mapView: GMSMapView) {
-        for tree in treeLocations {
+        for tree in trees {
             let marker = GMSMarker()
-            marker.position = CLLocationCoordinate2DMake(tree.1, tree.2)
-            marker.title = tree.0
-            marker.icon = UIImage(named: "ic_tree_green")
+            marker.position = CLLocationCoordinate2DMake(tree.lat, tree.lng)
+            marker.title = tree.name
+            marker.icon = tree.icon
+            marker.snippet = tree.desc
             marker.map = mapView
+            treeMarkers.append(marker)
         }
         
         for (index,water) in waterLocations.enumerated() {
             let marker = GMSMarker()
             
-            marker.position = CLLocationCoordinate2DMake(water.1, water.2)
-            marker.title = water.0
+            marker.position = CLLocationCoordinate2DMake(water.lat, water.lng)
+            marker.title = water.name
             marker.icon = UIImage(named: "ic_water_resource")
             
             marker.map = mapView
             if index == 0 {
                 mapView.selectedMarker = marker
             }
+            waterMarkers.append(marker)
         }
     }
     
@@ -200,43 +214,68 @@ class MainController: BaseController {
                 self.line = GMSPolyline(path: path)
                 self.line.path = path
                 self.line.strokeWidth = 3
-                self.line.strokeColor = UIColor.blue
+                self.line.strokeColor = Const.BLUE
                 self.line.map = mapView
             }
         }
     }
     
-    func drawPath(mapView: GMSMapView, index: Int) {
-        let path = paths[index]
-        if path.0 == 0 {
-            drawDirection(mapView: mapView, startTreeIndex: path.1, endTreeIndex: path.2)
-        } else if path.0 == 1 {
-            drawDirectionWaterToTree(mapView: mapView, waterIndex: path.1, treeIndex: path.2)
-        } else {
-            drawDirectionTreeToWater(mapView: mapView, treeIndex: path.1, waterIndex: path.2)
-        }
-    }
-    
     func initDirections(mapView: GMSMapView) {
-        drawPath(mapView: mapView, index: 0)
+        drawDirection(mapView: mapView, pathIndex: 0)
     }
     
-    func drawDirection(mapView: GMSMapView, startTreeIndex: Int, endTreeIndex: Int) {
-        let firstTreeLocation = CLLocation(latitude: treeLocations[startTreeIndex].1, longitude: treeLocations[startTreeIndex].2)
-        let secondTreeLocation = CLLocation(latitude: treeLocations[endTreeIndex].1, longitude: treeLocations[endTreeIndex].2)
-        drawDirection(mapView: mapView, start: firstTreeLocation, destination: secondTreeLocation)
+    func drawDirection(mapView: GMSMapView, pathIndex: Int) {
+        let path = paths[pathIndex]
+        var startObj: ModelObject?
+        var endObj: ModelObject?
+        if path.0 == 0 {
+            startObj = trees[path.1]
+            endObj = trees[path.2]
+            mapView.selectedMarker = treeMarkers[path.2]
+        } else if path.0 == 1 {
+            startObj = waterLocations[path.1]
+            endObj = trees[path.2]
+            mapView.selectedMarker = treeMarkers[path.2]
+        } else {
+            startObj = trees[path.1]
+            endObj = waterLocations[path.2]
+
+        }
+        let startLoc = CLLocation(latitude: startObj!.lat, longitude: startObj!.lng)
+        let endLoc = CLLocation(latitude: endObj!.lat, longitude: endObj!.lng)
+        drawDirection(mapView: mapView, start: startLoc, destination: endLoc)
+        let camera = GMSCameraPosition.camera(withLatitude: endObj!.lat, longitude: endObj!.lng , zoom: 17)
+        mapView.animate(to: camera)
     }
     
-    func drawDirectionTreeToWater(mapView: GMSMapView, treeIndex: Int, waterIndex: Int) {
-        let treeLocation = CLLocation(latitude: treeLocations[treeIndex].1, longitude: treeLocations[treeIndex].2)
-        let waterLocation = CLLocation(latitude: waterLocations[waterIndex].1, longitude: waterLocations[waterIndex].2)
-        drawDirection(mapView: mapView, start: treeLocation, destination: waterLocation)
-    }
-    
-    func drawDirectionWaterToTree(mapView: GMSMapView, waterIndex: Int, treeIndex: Int) {
-        let treeLocation = CLLocation(latitude: treeLocations[treeIndex].1, longitude: treeLocations[treeIndex].2)
-        let waterLocation = CLLocation(latitude: waterLocations[waterIndex].1, longitude: waterLocations[waterIndex].2)
-        drawDirection(mapView: mapView, start: waterLocation, destination: treeLocation)
+    func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
+        guard let index = treeMarkers.index(of: marker) else {
+            return false
+        }
+        let tree = trees[index]
+        var information: String = "Cây đã đủ nước, không cần tưới"
+        if (tree.needWater) {
+            information = "\(tree.name) - \(tree.desc) \n Tưới cây này?"
+        }
+        let alert = UIAlertController(title: "Xác nhận", message: information, preferredStyle: UIAlertControllerStyle.alert)
+        if (tree.needWater) {
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { (action) in
+                marker.icon = UIImage(named: "ic_tree_green")!
+            }))
+            alert.addAction(UIAlertAction(title: "Huỷ", style: UIAlertActionStyle.cancel, handler: nil))
+        } else {
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
+        }
+        self.present(alert, animated: true, completion: nil)
+        return true
     }
     
 }
+
+
+
+
+
+
+
+
