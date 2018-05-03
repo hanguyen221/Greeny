@@ -20,12 +20,12 @@ class MainController: BaseController, GMSMapViewDelegate {
         ModelTree(name: "Cây 1", lat: 21.006274, lng: 105.842803, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red")),
         ModelTree(name: "Cây 2", lat: 21.006985, lng: 105.844005, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red")),
         ModelTree(name: "Cây 3", lat: 21.005678, lng: 105.8411293,desc:  "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red")),
-        ModelTree(name: "Cây 4", lat: 21.005693, lng: 105.844616, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_green"), needWater: false),
+        ModelTree(name: "Cây 4", lat: 21.005693, lng: 105.844616, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red"), needWater: false),
         ModelTree(name: "Cây 5", lat: 21.003419, lng: 105.843736, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red")),
         ModelTree(name: "Cây 6", lat: 21.004141, lng: 105.843951, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red")),
-        ModelTree(name: "Cây 7", lat: 21.005112, lng: 105.843629, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_green"), needWater: false),
+        ModelTree(name: "Cây 7", lat: 21.005112, lng: 105.843629, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red"), needWater: false),
         ModelTree(name: "Cây 8", lat: 21.005112, lng: 105.845174, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red")),
-        ModelTree(name: "Cây 9", lat: 21.004742, lng: 105.841955, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_green"), needWater: false),
+        ModelTree(name: "Cây 9", lat: 21.004742, lng: 105.841955, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red")),
         ModelTree(name: "Cây 10",lat: 21.004531,lng:  105.843050, desc:  "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red"))
     ]
     
@@ -36,19 +36,19 @@ class MainController: BaseController, GMSMapViewDelegate {
     
     // n0->4->5->9->8->n0->2->0->n1->6->7->3->n1->1
     let paths: [(Int, Int, Int)] = [
-        (1, 0, 4),
-        (0, 4, 5),
-        (0, 5, 9),
-        (0, 9, 8),
-        (2, 8, 0),
-        (1, 0, 2),
-        (0, 2, 0),
-        (2, 0, 1),
-        (1, 1, 6),
-        (0, 6, 7),
-        (0, 7, 3),
-        (2, 3, 1),
-        (1, 1, 1)
+        (1, 0, 8),
+        (0, 8, 9),
+        (0, 9, 6),
+        (0, 6, 5),
+//        (2, 8, 0),
+//        (1, 0, 2),
+//        (0, 2, 0),
+//        (2, 0, 1),
+//        (1, 1, 6),
+//        (0, 6, 7),
+//        (0, 7, 3),
+//        (2, 3, 1),
+//        (1, 1, 1)
     ]
     
     var currentIndex = 0
@@ -109,6 +109,9 @@ class MainController: BaseController, GMSMapViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.isHidden = true
+        
+        let loginVC = LoginController()
+        present(loginVC, animated: false, completion: nil)
         
         view.addSubview(hamburgerButton)
         view.addSubview(nextButton)

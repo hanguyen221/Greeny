@@ -130,6 +130,9 @@ class SideMenuRootController: BaseController, UITableViewDelegate, UITableViewDa
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if (indexPath.row == 3) {
+            present(LoginController(), animated: true, completion: nil)
+        }
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }
