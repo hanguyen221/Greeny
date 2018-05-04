@@ -11,4 +11,5 @@ target 'Greeny' do
   pod 'GoogleMaps', '~> 2.5.0'
   pod 'Alamofire'
   pod 'SwiftyJSON'
+  pod 'CVCalendar'
 end

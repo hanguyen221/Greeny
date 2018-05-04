@@ -131,7 +131,33 @@ class SideMenuRootController: BaseController, UITableViewDelegate, UITableViewDa
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        let index = indexPath.item
+        if index == 0 {
+            gotoScheduleRegisterController()
+        } else if index == 1 {
+            gotoWaterHistoryController()
+        }
+        
     }
+    
+    func gotoScheduleRegisterController() {
+        let storyboard = UIStoryboard(name: "Menu", bundle: nil)
+        let controller = storyboard.instantiateViewController(withIdentifier: "ScheduleRegisterController") as! ScheduleRegisterController
+        let backButton = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        controller.navigationItem.backBarButtonItem = backButton
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    func gotoWaterHistoryController() {
+        let storyboard = UIStoryboard(name: "Menu", bundle: nil)
+        let controller = storyboard.instantiateViewController(withIdentifier: "WaterHistoryController") as! WaterHistoryController
+        let backButton = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        controller.navigationItem.backBarButtonItem = backButton
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    
 }
 
 
