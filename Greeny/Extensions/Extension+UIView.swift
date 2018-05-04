@@ -114,4 +114,11 @@ extension UIView {
         return heightConstraint
     }
     
+    func setConstraintsMatchParent(_ view: UIView) {
+        anchorWithConstraints(topAnchor: view.topAnchor,
+                              leftAnchor: view.leftAnchor,
+                              bottomAnchor: view.bottomAnchor,
+                              rightAnchor: view.rightAnchor)
+    }
+    
 }
