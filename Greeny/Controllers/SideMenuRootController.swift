@@ -11,8 +11,8 @@ import UIKit
 class SideMenuRootController: BaseController, UITableViewDelegate, UITableViewDataSource {
     
     let sideMenuOptions: [SideMenuOption] = [
-        SideMenuOption(icon: UIImage(named: "ic_edit")!, label: "Cập nhật thông tin"),
-        SideMenuOption(icon: UIImage(named: "ic_calendar")!, label: "Đăng kí lịch nghỉ"),
+        SideMenuOption(icon: UIImage(named: "ic_edit")!, label: "Đăng kí lịch nghỉ"),
+        SideMenuOption(icon: UIImage(named: "ic_calendar")!, label: "Lịch sử tưới cây"),
         SideMenuOption(icon: UIImage(named: "ic_settings")!, label: "Cài đặt"),
         SideMenuOption(icon: UIImage(named: "ic_logout")!, label: "Đăng xuất")
     ]

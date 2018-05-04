@@ -13,6 +13,8 @@ class WaterHistoryController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
+    
+    
     var historyArray = [TreeHistoryModel]()
     
     override func viewDidLoad() {
@@ -38,6 +40,11 @@ class WaterHistoryController: UIViewController {
         historyArray.append(TreeHistoryModel(date: "14:20 21/4/2018", tree: tree3, water: 4))
         historyArray.append(TreeHistoryModel(date: "13:00 22/4/2018", tree: tree4, water: 1))
     }
+    
+    @IBAction func backBtnPressed(_ sender: Any) {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
     
 }
 

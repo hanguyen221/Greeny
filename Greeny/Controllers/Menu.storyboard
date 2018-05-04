@@ -61,8 +61,38 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="l1D-yQ-ecR">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="76"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fdX-RT-kMw">
+                                        <rect key="frame" x="8" y="28" width="40" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="40" id="9eH-tK-Rfx"/>
+                                            <constraint firstAttribute="height" constant="40" id="qrs-eX-C0B"/>
+                                        </constraints>
+                                        <state key="normal" image="ic_back"/>
+                                        <connections>
+                                            <action selector="backBtnPressed:" destination="JUp-q1-azm" eventType="touchUpInside" id="cg1-ZL-eTN"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lịch sử tưới cây" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H5P-hK-RTo">
+                                        <rect key="frame" x="127.5" y="38.5" width="120.5" height="19.5"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.0" green="0.40784313725490196" blue="0.54509803921568623" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="fdX-RT-kMw" secondAttribute="bottom" constant="8" id="1lr-rB-1ww"/>
+                                    <constraint firstItem="fdX-RT-kMw" firstAttribute="leading" secondItem="l1D-yQ-ecR" secondAttribute="leading" constant="8" id="Tre-fa-yPk"/>
+                                    <constraint firstAttribute="height" constant="76" id="dnO-Mp-xpt"/>
+                                    <constraint firstItem="H5P-hK-RTo" firstAttribute="centerX" secondItem="l1D-yQ-ecR" secondAttribute="centerX" id="gSY-eS-HRU"/>
+                                    <constraint firstItem="H5P-hK-RTo" firstAttribute="centerY" secondItem="fdX-RT-kMw" secondAttribute="centerY" id="tpl-gm-20K"/>
+                                </constraints>
+                            </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="cyB-7X-CYA">
-                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                                <rect key="frame" x="0.0" y="76" width="375" height="591"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
                                     <outlet property="dataSource" destination="JUp-q1-azm" id="h7Z-6v-Hd9"/>
@@ -73,8 +103,11 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="H6Z-8I-Ivx" firstAttribute="trailing" secondItem="cyB-7X-CYA" secondAttribute="trailing" id="30p-9q-laV"/>
+                            <constraint firstItem="l1D-yQ-ecR" firstAttribute="leading" secondItem="H6Z-8I-Ivx" secondAttribute="leading" id="6OJ-5i-ORH"/>
+                            <constraint firstItem="H6Z-8I-Ivx" firstAttribute="trailing" secondItem="l1D-yQ-ecR" secondAttribute="trailing" id="D83-y3-DmH"/>
                             <constraint firstItem="H6Z-8I-Ivx" firstAttribute="bottom" secondItem="cyB-7X-CYA" secondAttribute="bottom" id="FFd-Sb-d5p"/>
-                            <constraint firstItem="cyB-7X-CYA" firstAttribute="top" secondItem="H6Z-8I-Ivx" secondAttribute="top" id="FlY-lc-Umt"/>
+                            <constraint firstItem="l1D-yQ-ecR" firstAttribute="top" secondItem="u6p-A0-daM" secondAttribute="top" id="Mcg-lf-oD0"/>
+                            <constraint firstItem="cyB-7X-CYA" firstAttribute="top" secondItem="l1D-yQ-ecR" secondAttribute="bottom" id="fut-V3-FIg"/>
                             <constraint firstItem="cyB-7X-CYA" firstAttribute="leading" secondItem="H6Z-8I-Ivx" secondAttribute="leading" id="h5M-pG-qjo"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="H6Z-8I-Ivx"/>
@@ -85,7 +118,10 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="h1d-TJ-wd2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="834" y="144"/>
+            <point key="canvasLocation" x="832.79999999999995" y="143.47826086956522"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="ic_back" width="64" height="64"/>
+    </resources>
 </document>
