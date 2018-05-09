@@ -11,10 +11,12 @@ import UIKit
 class ModelTree: ModelObject {
     var desc: String = ""
     var needWater: Bool = true
+    var waterNeed: Int = 0
     
-    init(name: String, lat: Double, lng: Double, desc: String, icon: UIImage? = UIImage(named: "ic_tree_green")!, needWater: Bool? = true) {
+    init(name: String, lat: Double, lng: Double, icon: UIImage? = UIImage(named: "ic_tree_green")!, needWater: Bool? = true, waterNeed: Int = 0) {
         super.init(name: name, lat: lat, lng: lng, icon: icon)
-        self.desc = desc
         self.needWater = needWater!
+        self.waterNeed = waterNeed
+        self.desc = "Cần \(waterNeed) lit nước"
     }
 }

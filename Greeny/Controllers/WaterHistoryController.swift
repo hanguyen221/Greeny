@@ -27,13 +27,13 @@ class WaterHistoryController: UIViewController {
     }
     
     func initHistory() {
-        let tree1 = ModelTree(name: "Cây 1", lat: 21.006274, lng: 105.842803, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red"))
+        let tree1 = ModelTree(name: "Cây 1", lat: 21.006274, lng: 105.842803, icon: UIImage(named: "ic_tree_red"), waterNeed: 2)
         
-        let tree2 = ModelTree(name: "Cây 3", lat: 21.006274, lng: 105.842803, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red"))
+        let tree2 = ModelTree(name: "Cây 3", lat: 21.006274, lng: 105.842803, icon: UIImage(named: "ic_tree_red"), waterNeed: 1)
         
-        let tree3 = ModelTree(name: "Cây 4", lat: 21.006274, lng: 105.842803, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red"))
+        let tree3 = ModelTree(name: "Cây 4", lat: 21.006274, lng: 105.842803, icon: UIImage(named: "ic_tree_red"), waterNeed: 4)
         
-        let tree4 = ModelTree(name: "Cây 7", lat: 21.006274, lng: 105.842803, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red"))
+        let tree4 = ModelTree(name: "Cây 7", lat: 21.006274, lng: 105.842803, icon: UIImage(named: "ic_tree_red"), waterNeed: 1)
         
         historyArray.append(TreeHistoryModel(date: "14:00 21/4/2018", tree: tree1, water: 2))
         historyArray.append(TreeHistoryModel(date: "14:30 21/4/2018", tree: tree2, water: 1))

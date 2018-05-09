@@ -17,16 +17,16 @@ class MainController: BaseController, GMSMapViewDelegate {
     var locationManager = CLLocationManager()
     
     let trees: [ModelTree] = [
-        ModelTree(name: "Cây 1", lat: 21.006274, lng: 105.842803, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red")),
-        ModelTree(name: "Cây 2", lat: 21.006985, lng: 105.844005, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red")),
-        ModelTree(name: "Cây 3", lat: 21.005678, lng: 105.8411293,desc:  "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red")),
-        ModelTree(name: "Cây 4", lat: 21.005693, lng: 105.844616, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red"), needWater: false),
-        ModelTree(name: "Cây 5", lat: 21.003419, lng: 105.843736, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red")),
-        ModelTree(name: "Cây 6", lat: 21.004141, lng: 105.843951, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red")),
-        ModelTree(name: "Cây 7", lat: 21.005112, lng: 105.843629, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red"), needWater: false),
-        ModelTree(name: "Cây 8", lat: 21.005112, lng: 105.845174, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red")),
-        ModelTree(name: "Cây 9", lat: 21.004742, lng: 105.841955, desc: "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red")),
-        ModelTree(name: "Cây 10",lat: 21.004531,lng:  105.843050, desc:  "Cần 1 lít nước", icon: UIImage(named: "ic_tree_red"))
+        ModelTree(name: "Cây 1", lat: 21.006274, lng: 105.842803, icon: UIImage(named: "ic_tree_red"), waterNeed: 1),
+        ModelTree(name: "Cây 2", lat: 21.006985, lng: 105.844005, icon: UIImage(named: "tree2_red"), waterNeed: 3),
+        ModelTree(name: "Cây 3", lat: 21.005678, lng: 105.8411293, icon: UIImage(named: "tree3_red"), waterNeed: 2),
+        ModelTree(name: "Cây 4", lat: 21.005693, lng: 105.844616, icon: UIImage(named: "tree4_red"), waterNeed: 2),
+        ModelTree(name: "Cây 5", lat: 21.003419, lng: 105.843736, icon: UIImage(named: "tree4_red"), waterNeed: 1),
+        ModelTree(name: "Cây 6", lat: 21.004141, lng: 105.843951, icon: UIImage(named: "tree5_red"), waterNeed: 4),
+        ModelTree(name: "Cây 7", lat: 21.005112, lng: 105.843629, icon: UIImage(named: "tree3_green"), waterNeed: 0),
+        ModelTree(name: "Cây 8", lat: 21.005112, lng: 105.845174, icon: UIImage(named: "tree2_red"), needWater: false, waterNeed: 0),
+        ModelTree(name: "Cây 9", lat: 21.004742, lng: 105.841955, icon: UIImage(named: "tree1_red"), waterNeed: 3),
+        ModelTree(name: "Cây 10",lat: 21.004531,lng:  105.843050, icon: UIImage(named: "ic_tree_red"), waterNeed: 1)
     ]
     
     let waterLocations: [ModelWater] = [
@@ -38,8 +38,8 @@ class MainController: BaseController, GMSMapViewDelegate {
     let paths: [(Int, Int, Int)] = [
         (1, 0, 8),
         (0, 8, 9),
-        (0, 9, 6),
-        (0, 6, 5),
+        (0, 9, 3),
+        (0, 3, 5),
 //        (2, 8, 0),
 //        (1, 0, 2),
 //        (0, 2, 0),
@@ -165,8 +165,13 @@ class MainController: BaseController, GMSMapViewDelegate {
     @objc func nextPath() {
         if currentIndex < paths.count - 1 {
             currentIndex += 1
+            drawDirection(mapView: mapView!, pathIndex: currentIndex)
+        } else {
+            let alert = UIAlertController(title: "Thông báo", message: "Đã tưới xong cây của buổi này", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         }
-        drawDirection(mapView: mapView!, pathIndex: currentIndex)
+        
     }
     
     @objc func prevPath() {
