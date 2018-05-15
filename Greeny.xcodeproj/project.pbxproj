@@ -39,6 +39,8 @@
 		FA1D98F32062147F0001E159 /* SideMenuOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1D98F22062147F0001E159 /* SideMenuOption.swift */; };
 		FA5F91862064B30F0003EF77 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5F91852064B30F0003EF77 /* LoginController.swift */; };
 		FA5F91892064B3410003EF77 /* PaddedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5F91882064B3410003EF77 /* PaddedTextField.swift */; };
+		FA8073BA20AB4F3400296152 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8073B920AB4F3400296152 /* SettingsController.swift */; };
+		FA8073BC20AB4F8C00296152 /* SettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8073BB20AB4F8C00296152 /* SettingsCell.swift */; };
 		FAC3DE4C207713470058ACDC /* ModelTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC3DE4B207713470058ACDC /* ModelTree.swift */; };
 		FAC3DE4E207716C00058ACDC /* ModelWater.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC3DE4D207716C00058ACDC /* ModelWater.swift */; };
 		FAC3DE50207718340058ACDC /* ModelObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC3DE4F207718340058ACDC /* ModelObject.swift */; };
@@ -80,6 +82,8 @@
 		FA1D98F22062147F0001E159 /* SideMenuOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuOption.swift; sourceTree = "<group>"; };
 		FA5F91852064B30F0003EF77 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		FA5F91882064B3410003EF77 /* PaddedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddedTextField.swift; sourceTree = "<group>"; };
+		FA8073B920AB4F3400296152 /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
+		FA8073BB20AB4F8C00296152 /* SettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCell.swift; sourceTree = "<group>"; };
 		FAC3DE4B207713470058ACDC /* ModelTree.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTree.swift; sourceTree = "<group>"; };
 		FAC3DE4D207716C00058ACDC /* ModelWater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelWater.swift; sourceTree = "<group>"; };
 		FAC3DE4F207718340058ACDC /* ModelObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelObject.swift; sourceTree = "<group>"; };
@@ -179,6 +183,7 @@
 				A27F07F4209B817300C68F2F /* ScheduleRegisterController.swift */,
 				A2BD68DB209B874E00187805 /* WaterHistoryController.swift */,
 				A28E1C7D20AB2DB900A20AC6 /* Main.storyboard */,
+				FA8073B920AB4F3400296152 /* SettingsController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -241,6 +246,7 @@
 				FA1D98EC2061A7780001E159 /* SideMenuCell.swift */,
 				A2BD68D5209B84B600187805 /* TreeHistoryCell.swift */,
 				A2BD68D6209B84B600187805 /* TreeHistoryCell.xib */,
+				FA8073BB20AB4F8C00296152 /* SettingsCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -413,6 +419,7 @@
 				FA1D98E7205E47560001E159 /* Utils.swift in Sources */,
 				A28E1C7720AB139F00A20AC6 /* MarkerInfoView.swift in Sources */,
 				A28E1C8020AB3F2000A20AC6 /* NSLayoutExtensions.swift in Sources */,
+				FA8073BC20AB4F8C00296152 /* SettingsCell.swift in Sources */,
 				A28E1C7C20AB1B9F00A20AC6 /* UIViewExtensions.swift in Sources */,
 				FA1D98DB205E43E50001E159 /* BaseController.swift in Sources */,
 				FA1D98F1206212430001E159 /* ProfileController.swift in Sources */,
@@ -421,6 +428,7 @@
 				FAC3DE4E207716C00058ACDC /* ModelWater.swift in Sources */,
 				FA1D98E5205E47420001E159 /* Extension+UIImage.swift in Sources */,
 				A28E1C7520AB067800A20AC6 /* User.swift in Sources */,
+				FA8073BA20AB4F3400296152 /* SettingsController.swift in Sources */,
 				FA1D98DF205E46590001E159 /* Const.swift in Sources */,
 				FA1D98EA206025B50001E159 /* SideMenuRootController.swift in Sources */,
 				FA5F91862064B30F0003EF77 /* LoginController.swift in Sources */,
