@@ -73,6 +73,8 @@ class MainController: BaseController, GMSMapViewDelegate {
     @IBOutlet weak var nextButton: UIButton!
     @IBOutlet weak var prevButton: UIButton!
     @IBOutlet weak var waterButton: UIButton!
+    @IBOutlet var getWaterButton: UIButton!
+    
     
     @IBOutlet var navView: UIView!
     @IBOutlet var infoView: MarkerInfoView!
@@ -114,17 +116,25 @@ class MainController: BaseController, GMSMapViewDelegate {
         
         view.addSubview(infoView)
         
+        currentWaterLabel.text = "10/10 lít"
+        
+        progressWidthConstraint.constant = 97
+        
         setupHamburgerButton()
         setupNextButton()
-        setupPrevButton()
+//        setupPrevButton()
         setupWaterButton()
+        setupGetWaterButton()
         mapView?.delegate = self
         mapView?.isMyLocationEnabled = true
         self.markerView = MarkerInfoView()
         
         let camera = GMSCameraPosition.camera(withLatitude: waterLocations[0].lat, longitude: waterLocations[0].lng, zoom: 17)
         setupMarkers(with: mapView!)
-        initDirections(mapView: mapView!)
+//        initDirections(mapView: mapView!)
+        
+        nextPath()
+        
         mapView.animate(to: camera)
         self.locationManager.startUpdatingLocation()
     }
@@ -159,10 +169,28 @@ class MainController: BaseController, GMSMapViewDelegate {
         waterButton.addTarget(self, action: #selector(water), for: .touchUpInside)
     }
     
+    func setupGetWaterButton() {
+        getWaterButton.addTarget(self, action: #selector(getWater), for: .touchUpInside)
+    }
+    
     var isWatering = false
     
     var currentTree: ModelTree?
     var currentMarker: GMSMarker?
+    
+    @objc func getWater() {
+        let waterGetAmount = 10 - currentWater
+        
+        if waterGetAmount == 0 {
+            alert(message: "Bình vẫn đầy. Không cần lấy thêm nước. ")
+        } else {
+            alert(message: "Đã lấy \(waterGetAmount) lít. Hiện có 10 lít nước.")
+        }
+        
+        self.currentWater = 10
+        self.progressWidthConstraint.constant = 97
+        self.currentWaterLabel.text = "10/10 lít"
+    }
     
     @objc func water() {
         
@@ -211,6 +239,7 @@ class MainController: BaseController, GMSMapViewDelegate {
     
     @objc func nextPath() {
         if let randomNextTreeIndex = randomNextTree() {
+            self.infoView.isHidden = false
             let tree = trees[randomNextTreeIndex]
             self.currentTree = tree
             self.currentMarker = treeMarkers[randomNextTreeIndex]
@@ -219,6 +248,7 @@ class MainController: BaseController, GMSMapViewDelegate {
             let endLocation = CLLocation(latitude: tree.lat, longitude: tree.lng)
             guard let currentLocation = self.currentLocation else {return}
             drawDirection(mapView: mapView, start: currentLocation, destination: endLocation)
+            showGetWaterButton(false)
         } else {
             alert(message: "Không còn cây nào chưa đủ nước")
         }
@@ -315,11 +345,29 @@ class MainController: BaseController, GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
         mapView.selectedMarker = marker
         guard let index = treeMarkers.index(of: marker) else {
+            
+            guard let waterIndex = waterMarkers.index(of: marker) else {
+                return false
+            }
+            currentTree = nil
+            currentMarker = nil
+            infoView.isHidden = true
+            guard let currentLocation = self.currentLocation else {return false}
+            
+            let water = waterLocations[waterIndex]
+            let location = CLLocation(latitude: water.lat, longitude: water.lng)
+            drawDirection(mapView: mapView, start: currentLocation, destination: location)
+            showGetWaterButton(true)
             return false
         }
         self.currentMarker = marker
         self.currentTree = trees[index]
+        let location = CLLocation(latitude: currentTree!.lat, longitude: currentTree!.lng)
+        guard let currentLocation = self.currentLocation else {return false}
+        drawDirection(mapView: mapView, start: currentLocation, destination: location)
+        infoView.isHidden = false
         infoView.configure(with: trees[index])
+        showGetWaterButton(false)
         return true
     }
     
@@ -337,7 +385,10 @@ class MainController: BaseController, GMSMapViewDelegate {
         return nil
     }
     
-    
+    func showGetWaterButton(_ show: Bool) {
+        getWaterButton.isHidden = !show
+        waterButton.isHidden = show
+    }
     
 }
 

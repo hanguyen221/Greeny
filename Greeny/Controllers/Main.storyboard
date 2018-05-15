@@ -144,7 +144,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qeF-qq-8ve">
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qeF-qq-8ve">
                                 <rect key="frame" x="16" y="603" width="48" height="48"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -158,11 +158,24 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </button>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tJV-hF-0sZ">
+                                <rect key="frame" x="123" y="603" width="128" height="48"/>
+                                <color key="backgroundColor" red="0.90588235289999997" green="0.29803921570000003" blue="0.23529411759999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="Lấy nước">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="24"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="ybj-c8-vp1" firstAttribute="centerY" secondItem="qeF-qq-8ve" secondAttribute="centerY" id="8BZ-BP-pum"/>
                             <constraint firstItem="uFC-2A-Glh" firstAttribute="trailing" secondItem="mY8-hj-LhO" secondAttribute="trailing" id="Dym-GG-oBP"/>
+                            <constraint firstItem="tJV-hF-0sZ" firstAttribute="top" secondItem="ybj-c8-vp1" secondAttribute="top" id="Eo6-Dh-xt1"/>
                             <constraint firstItem="qeF-qq-8ve" firstAttribute="leading" secondItem="uFC-2A-Glh" secondAttribute="leading" constant="16" id="Hgd-aR-a1C"/>
                             <constraint firstItem="uFC-2A-Glh" firstAttribute="trailing" secondItem="WmX-Wm-CHG" secondAttribute="trailing" id="HsI-8J-PJd"/>
                             <constraint firstItem="uFC-2A-Glh" firstAttribute="bottom" secondItem="E1c-8r-SB9" secondAttribute="bottom" constant="16" id="LGH-Dm-LBe"/>
@@ -171,10 +184,13 @@
                             <constraint firstItem="vbi-Cd-1X0" firstAttribute="leading" secondItem="uFC-2A-Glh" secondAttribute="leading" id="SpR-jb-7ur"/>
                             <constraint firstItem="vbi-Cd-1X0" firstAttribute="top" secondItem="uFC-2A-Glh" secondAttribute="top" id="TIv-he-dF3"/>
                             <constraint firstItem="uFC-2A-Glh" firstAttribute="trailing" secondItem="vbi-Cd-1X0" secondAttribute="trailing" id="TMy-Jw-xMP"/>
+                            <constraint firstItem="tJV-hF-0sZ" firstAttribute="leading" secondItem="ybj-c8-vp1" secondAttribute="leading" id="VRB-Dm-nNp"/>
                             <constraint firstItem="uFC-2A-Glh" firstAttribute="bottom" secondItem="qeF-qq-8ve" secondAttribute="bottom" constant="16" id="Vy6-hz-7mq"/>
+                            <constraint firstItem="tJV-hF-0sZ" firstAttribute="bottom" secondItem="ybj-c8-vp1" secondAttribute="bottom" id="Y8W-WM-uIj"/>
                             <constraint firstItem="ybj-c8-vp1" firstAttribute="centerX" secondItem="uFC-2A-Glh" secondAttribute="centerX" id="gfa-9f-pNH"/>
                             <constraint firstItem="uFC-2A-Glh" firstAttribute="trailing" secondItem="E1c-8r-SB9" secondAttribute="trailing" constant="16" id="j1T-GL-n0K"/>
                             <constraint firstItem="mY8-hj-LhO" firstAttribute="leading" secondItem="uFC-2A-Glh" secondAttribute="leading" id="mIP-78-Eeg"/>
+                            <constraint firstItem="tJV-hF-0sZ" firstAttribute="trailing" secondItem="ybj-c8-vp1" secondAttribute="trailing" id="ux8-ON-AmQ"/>
                             <constraint firstItem="WmX-Wm-CHG" firstAttribute="leading" secondItem="uFC-2A-Glh" secondAttribute="leading" id="xat-Og-jTu"/>
                             <constraint firstItem="uFC-2A-Glh" firstAttribute="bottom" secondItem="mY8-hj-LhO" secondAttribute="bottom" id="xoM-jN-PrZ"/>
                         </constraints>
@@ -183,6 +199,7 @@
                     <navigationItem key="navigationItem" id="zKr-YG-4cV"/>
                     <connections>
                         <outlet property="currentWaterLabel" destination="kd3-Gl-UKS" id="Bj8-Jk-lO8"/>
+                        <outlet property="getWaterButton" destination="tJV-hF-0sZ" id="UV6-zN-WHM"/>
                         <outlet property="hamburgerButton" destination="3Tk-kD-alA" id="TEZ-dX-Dck"/>
                         <outlet property="infoView" destination="WmX-Wm-CHG" id="irY-7i-6HF"/>
                         <outlet property="mapView" destination="mY8-hj-LhO" id="qE9-R0-Yi0"/>
