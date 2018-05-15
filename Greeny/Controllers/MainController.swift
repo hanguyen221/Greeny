@@ -16,18 +16,18 @@ class MainController: BaseController, GMSMapViewDelegate {
     
     var locationManager = CLLocationManager()
     
-    let trees: [ModelTree] = [
-        ModelTree(name: "Cây 1", lat: 21.006274, lng: 105.842803, icon: UIImage(named: "ic_tree_red"), waterNeed: 1),
-        ModelTree(name: "Cây 2", lat: 21.006985, lng: 105.844005, icon: UIImage(named: "tree2_red"), waterNeed: 3),
-        ModelTree(name: "Cây 3", lat: 21.005678, lng: 105.8411293, icon: UIImage(named: "tree3_red"), waterNeed: 2),
-        ModelTree(name: "Cây 4", lat: 21.005693, lng: 105.844616, icon: UIImage(named: "tree4_red"), waterNeed: 2),
-        ModelTree(name: "Cây 5", lat: 21.003419, lng: 105.843736, icon: UIImage(named: "tree4_red"), waterNeed: 1),
-        ModelTree(name: "Cây 6", lat: 21.004141, lng: 105.843951, icon: UIImage(named: "tree5_red"), waterNeed: 4),
-        ModelTree(name: "Cây 7", lat: 21.005112, lng: 105.843629, icon: UIImage(named: "tree3_green"), waterNeed: 0),
-        ModelTree(name: "Cây 8", lat: 21.005112, lng: 105.845174, icon: UIImage(named: "tree2_red"), needWater: false, waterNeed: 0),
-        ModelTree(name: "Cây 9", lat: 21.004742, lng: 105.841955, icon: UIImage(named: "tree1_red"), waterNeed: 3),
-        ModelTree(name: "Cây 10",lat: 21.004531,lng:  105.843050, icon: UIImage(named: "ic_tree_red"), waterNeed: 1)
-    ]
+    let tree_1 = ModelTree(type: 1, name: "Cây 1", lat: 21.006274, lng: 105.842803, totalWater: 5, currentWater: 2)
+    let tree_2 = ModelTree(type: 3, name: "Cây 2", lat: 21.006985, lng: 105.844005, totalWater: 5, currentWater: 5)
+    let tree_3 = ModelTree(type: 4, name: "Cây 3", lat: 21.005678, lng: 105.8411293, totalWater: 6, currentWater: 1)
+    let tree_4 = ModelTree(type: 0, name: "Cây 4", lat: 21.005693, lng: 105.844616, totalWater: 4, currentWater: 4)
+    let tree_5 = ModelTree(type: 4, name: "Cây 5", lat: 21.003419, lng: 105.843736, totalWater: 3, currentWater: 2)
+    let tree_6 = ModelTree(type: 2, name: "Cây 6", lat: 21.004141, lng: 105.843951, totalWater: 2, currentWater: 1)
+    let tree_7 = ModelTree(type: 2, name: "Cây 7", lat: 21.005112, lng: 105.843629, totalWater: 2, currentWater: 2)
+    let tree_8 = ModelTree(type: 1, name: "Cây 8", lat: 21.005112, lng: 105.845174, totalWater: 4, currentWater: 2)
+    let tree_9 = ModelTree(type: 0, name: "Cây 9", lat: 21.004742, lng: 105.841955, totalWater: 10, currentWater: 8)
+    let tree_10 = ModelTree(type: 3, name: "Cây 10", lat: 21.004531,lng:  105.843050, totalWater: 4, currentWater: 4)
+    
+    var trees: [ModelTree] = []
     
     let waterLocations: [ModelWater] = [
         ModelWater(name: "Nguồn 1", lat: 21.004017, lng: 105.842283),
@@ -58,33 +58,17 @@ class MainController: BaseController, GMSMapViewDelegate {
     var treeMarkers = [GMSMarker]()
     var waterMarkers = [GMSMarker]()
     
-    let hamburgerButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(UIImage(named: "ic_hamburger")?.alpha(0.9), for: .normal)
-        button.tintColor = UIColor(r: 0, g: 0, b: 0, a: 0.8)
-        button.addTarget(self, action: #selector(showSideMenu), for: .touchUpInside)
-        return button
-    }()
+    var markerView: MarkerInfoView?
     
-    lazy var nextButton: UIButton = {
-        let button = UIButton(type: .custom)
-        var img = UIImage(named: "ic_next")?.alpha(0.8)
-        img = Utils.resizeImage(image: img!, targetSize: CGSize(width: (img?.size.width)! * 0.7, height: (img?.size.height)! * 0.7))
-        button.setImage(img, for: .normal)
-        styleButton(button: button)
-        button.addTarget(self, action: #selector(nextPath), for: .touchUpInside)
-        return button
-    }()
+    @IBOutlet weak var hamburgerButton: UIButton!
+    @IBOutlet weak var nextButton: UIButton!
+    @IBOutlet weak var prevButton: UIButton!
+    @IBOutlet weak var waterButton: UIButton!
     
-    lazy var prevButton: UIButton = {
-        let button = UIButton(type: .custom)
-        var img = UIImage(named: "ic_prev")?.alpha(0.8)
-        img = Utils.resizeImage(image: img!, targetSize: CGSize(width: (img?.size.width)! * 0.7, height: (img?.size.height)! * 0.7))
-        button.setImage(img, for: .normal)
-        styleButton(button: button)
-        button.addTarget(self, action: #selector(prevPath), for: .touchUpInside)
-        return button
-    }()
+    @IBOutlet var navView: UIView!
+    @IBOutlet var infoView: MarkerInfoView!
+    
+    var timer = Timer()
     
     func styleButton(button: UIButton) {
         button.contentMode = .scaleAspectFit
@@ -95,16 +79,11 @@ class MainController: BaseController, GMSMapViewDelegate {
         button.layer.masksToBounds = true
     }
     
-    var mapView: GMSMapView?
+    @IBOutlet weak var mapView: GMSMapView!
     
-    override func loadView() {
-        super.loadView()
-        let camera = GMSCameraPosition.camera(withLatitude: waterLocations[0].lat, longitude: waterLocations[0].lng, zoom: 17)
-        mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
-        view = mapView
-        setupMarkers(with: mapView!)
-        initDirections(mapView: mapView!)
-    }
+    @IBOutlet var currentWaterWidthProportion: NSLayoutConstraint!
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -113,16 +92,31 @@ class MainController: BaseController, GMSMapViewDelegate {
         let loginVC = LoginController()
         present(loginVC, animated: false, completion: nil)
         
-        view.addSubview(hamburgerButton)
-        view.addSubview(nextButton)
-        view.addSubview(prevButton)
+        trees.append(tree_1)
+        trees.append(tree_2)
+        trees.append(tree_3)
+        trees.append(tree_4)
+        trees.append(tree_5)
+        trees.append(tree_6)
+        trees.append(tree_7)
+        trees.append(tree_8)
+        trees.append(tree_9)
+        trees.append(tree_10)
+        
+        view.addSubview(infoView)
+        
         setupHamburgerButton()
         setupNextButton()
         setupPrevButton()
-        
+        setupWaterButton()
         mapView?.delegate = self
         mapView?.isMyLocationEnabled = true
+        self.markerView = MarkerInfoView()
         
+        let camera = GMSCameraPosition.camera(withLatitude: waterLocations[0].lat, longitude: waterLocations[0].lng, zoom: 17)
+        setupMarkers(with: mapView!)
+        initDirections(mapView: mapView!)
+        mapView.animate(to: camera)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -131,30 +125,42 @@ class MainController: BaseController, GMSMapViewDelegate {
     }
     
     func setupHamburgerButton() {
-        hamburgerButton.anchorWithConstraints(topAnchor: view.topAnchor,
-                                              topConstant: 24,
-                                              leftAnchor: view.leftAnchor,
-                                              leftConstant: 16,
-                                              widthConstant: 32,
-                                              heightConstant: 32)
+        hamburgerButton.tintColor = UIColor(r: 0, g: 0, b: 0, a: 0.8)
+        hamburgerButton.addTarget(self, action: #selector(showSideMenu), for: .touchUpInside)
     }
     
     func setupNextButton() {
-        nextButton.anchorWithConstraints(bottomAnchor: view.bottomAnchor,
-                                         bottomConstant: 16,
-                                         rightAnchor: view.rightAnchor,
-                                         rightConstant: 16,
-                                         widthConstant: 48,
-                                         heightConstant: 48)
+        var img = UIImage(named: "ic_next")?.alpha(0.8)
+        img = Utils.resizeImage(image: img!, targetSize: CGSize(width: (img?.size.width)! * 0.7, height: (img?.size.height)! * 0.7))
+        nextButton.setImage(img, for: .normal)
+        styleButton(button: nextButton)
+        nextButton.addTarget(self, action: #selector(nextPath), for: .touchUpInside)
     }
     
     func setupPrevButton() {
-        prevButton.anchorWithConstraints(bottomAnchor: view.bottomAnchor,
-                                         bottomConstant: 16,
-                                         rightAnchor: nextButton.leftAnchor,
-                                         rightConstant: 16,
-                                         widthConstant: 48,
-                                         heightConstant: 48)
+        var img = UIImage(named: "ic_prev")?.alpha(0.8)
+        img = Utils.resizeImage(image: img!, targetSize: CGSize(width: (img?.size.width)! * 0.7, height: (img?.size.height)! * 0.7))
+        prevButton.setImage(img, for: .normal)
+        styleButton(button: prevButton)
+        prevButton.addTarget(self, action: #selector(prevPath), for: .touchUpInside)
+    }
+    
+    func setupWaterButton() {
+        waterButton.addTarget(self, action: #selector(water), for: .touchUpInside)
+    }
+    
+    var isWatering = false
+    
+    @objc func water() {
+        isWatering = true
+        
+//        while isWatering {
+//            let multipler = self.infoView.progressConstraint.multiplier
+//            self.infoView.progressConstraint = self.infoView.progressConstraint.setMultiplier(multiplier: multipler + 0.05)
+//            self.infoView.layoutIfNeeded()
+//        }
+        
+        
     }
     
     @objc func showSideMenu() {
@@ -192,7 +198,7 @@ class MainController: BaseController, GMSMapViewDelegate {
             marker.position = CLLocationCoordinate2DMake(tree.lat, tree.lng)
             marker.title = tree.name
             marker.icon = tree.icon
-            marker.snippet = tree.desc
+//            marker.snippet = tree.desc
             marker.map = mapView
             treeMarkers.append(marker)
         }
@@ -262,24 +268,27 @@ class MainController: BaseController, GMSMapViewDelegate {
     }
     
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
+        mapView.selectedMarker = marker
         guard let index = treeMarkers.index(of: marker) else {
             return false
         }
-        let tree = trees[index]
-        var information: String = "Cây đã đủ nước, không cần tưới"
-        if (tree.needWater) {
-            information = "\(tree.name) - \(tree.desc) \n Tưới cây này?"
-        }
-        let alert = UIAlertController(title: "Xác nhận", message: information, preferredStyle: UIAlertControllerStyle.alert)
-        if (tree.needWater) {
-            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { (action) in
-                marker.icon = UIImage(named: "ic_tree_green")!
-            }))
-            alert.addAction(UIAlertAction(title: "Huỷ", style: UIAlertActionStyle.cancel, handler: nil))
-        } else {
-            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
-        }
-        self.present(alert, animated: true, completion: nil)
+        
+        infoView.configure(with: trees[index])
+//        let tree = trees[index]
+//        var information: String = "Cây đã đủ nước, không cần tưới"
+//        if (tree.needWater) {
+//            information = "\(tree.name) - \(tree.desc) \n Tưới cây này?"
+//        }
+//        let alert = UIAlertController(title: "Xác nhận", message: information, preferredStyle: UIAlertControllerStyle.alert)
+//        if (tree.needWater) {
+//            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { (action) in
+//                marker.icon = UIImage(named: "ic_tree_green")!
+//            }))
+//            alert.addAction(UIAlertAction(title: "Huỷ", style: UIAlertActionStyle.cancel, handler: nil))
+//        } else {
+//            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
+//        }
+//        self.present(alert, animated: true, completion: nil)
         return true
     }
     

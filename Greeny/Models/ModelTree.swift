@@ -9,14 +9,29 @@
 import UIKit
 
 class ModelTree: ModelObject {
-    var desc: String = ""
-    var needWater: Bool = true
-    var waterNeed: Int = 0
-    
-    init(name: String, lat: Double, lng: Double, icon: UIImage? = UIImage(named: "ic_tree_green")!, needWater: Bool? = true, waterNeed: Int = 0) {
-        super.init(name: name, lat: lat, lng: lng, icon: icon)
-        self.needWater = needWater!
-        self.waterNeed = waterNeed
-        self.desc = "Cần \(waterNeed) lit nước"
+    var type: Int = 0
+    var totalWater: Double = 0
+    var currentWater: Double = 0
+    init(type: Int = 0, name: String, lat: Double, lng: Double, totalWater: Double, currentWater: Double) {
+        super.init(name: name, lat: lat, lng: lng, icon: nil)
+        self.type = type
+        self.totalWater = totalWater
+        self.currentWater = currentWater
+        
+        let waterNeed = totalWater - currentWater
+        if waterNeed > 0 {
+            if type == 0 {
+                self.icon = UIImage(named: "ic_tree_red")
+            } else if type >= 1 {
+                self.icon = UIImage(named: "tree\(type)_red")
+            }
+        } else {
+            if type == 0 {
+                self.icon = UIImage(named: "ic_tree_green")
+            } else if type >= 1 {
+                self.icon = UIImage(named: "tree\(type)_green")
+            }
+        }
+        
     }
 }
