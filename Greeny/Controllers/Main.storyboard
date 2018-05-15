@@ -6,7 +6,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
-        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -41,8 +40,11 @@
                                         <rect key="frame" x="219" y="24" width="100" height="16"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q1Q-Yf-8X1">
-                                                <rect key="frame" x="2" y="2" width="30" height="12"/>
+                                                <rect key="frame" x="2" y="2" width="0.0" height="12"/>
                                                 <color key="backgroundColor" red="0.19215686269999999" green="0.64705882349999999" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" id="IQv-nx-JWI"/>
+                                                </constraints>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                                         <real key="value" value="6"/>
@@ -57,7 +59,6 @@
                                         <constraints>
                                             <constraint firstAttribute="height" constant="16" id="5V2-J4-mB7"/>
                                             <constraint firstItem="q1Q-Yf-8X1" firstAttribute="leading" secondItem="AEd-bc-t0T" secondAttribute="leading" constant="2" id="Gl4-zY-plU"/>
-                                            <constraint firstItem="q1Q-Yf-8X1" firstAttribute="width" secondItem="AEd-bc-t0T" secondAttribute="width" multiplier="0.3" id="Iix-Wb-liO"/>
                                             <constraint firstAttribute="bottom" secondItem="q1Q-Yf-8X1" secondAttribute="bottom" constant="2" id="Zgl-Cc-Pr2"/>
                                             <constraint firstItem="q1Q-Yf-8X1" firstAttribute="top" secondItem="AEd-bc-t0T" secondAttribute="top" constant="2" id="bKH-l2-yyT"/>
                                             <constraint firstAttribute="width" constant="100" id="oTR-xI-PwB"/>
@@ -181,13 +182,15 @@
                     </view>
                     <navigationItem key="navigationItem" id="zKr-YG-4cV"/>
                     <connections>
-                        <outlet property="currentWaterWidthProportion" destination="Iix-Wb-liO" id="IOD-95-bap"/>
+                        <outlet property="currentWaterLabel" destination="kd3-Gl-UKS" id="Bj8-Jk-lO8"/>
                         <outlet property="hamburgerButton" destination="3Tk-kD-alA" id="TEZ-dX-Dck"/>
                         <outlet property="infoView" destination="WmX-Wm-CHG" id="irY-7i-6HF"/>
                         <outlet property="mapView" destination="mY8-hj-LhO" id="qE9-R0-Yi0"/>
                         <outlet property="navView" destination="vbi-Cd-1X0" id="Tpq-H6-qcA"/>
                         <outlet property="nextButton" destination="E1c-8r-SB9" id="DLS-Kr-zw9"/>
                         <outlet property="prevButton" destination="qeF-qq-8ve" id="MD2-GX-nhB"/>
+                        <outlet property="progressWidthConstraint" destination="IQv-nx-JWI" id="GSK-Kb-8al"/>
+                        <outlet property="userTypeLabel" destination="T6G-BE-PCe" id="Lj0-ZN-hLc"/>
                         <outlet property="waterButton" destination="ybj-c8-vp1" id="RxZ-Q3-WmC"/>
                     </connections>
                 </viewController>

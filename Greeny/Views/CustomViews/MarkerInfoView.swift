@@ -40,7 +40,14 @@ class MarkerInfoView: UIView {
         self.tree = tree
         UIView.animate(withDuration: 0.5) {
             self.treeNameLabel.text = tree.name
-            self.waterNeedLabel.text = "Cần \(tree.totalWater - tree.currentWater) lít"
+            if tree.totalWater == tree.currentWater {
+                self.waterNeedLabel.text = "Đủ nước"
+                self.waterNeedLabel.textColor = UIColor.blue
+            } else {
+                self.waterNeedLabel.text = "Cần \(tree.totalWater - tree.currentWater) lít"
+                self.waterNeedLabel.textColor = UIColor.red
+            }
+            
             if tree.totalWater == 0 {
                 self.progressConstraint = self.progressConstraint.setMultiplier(multiplier: 0)
             } else {

@@ -14,6 +14,13 @@ import SwiftyJSON
 
 class MainController: BaseController, GMSMapViewDelegate {
     
+    //MARK: - Nav's UIViews
+    
+    @IBOutlet var userTypeLabel: UILabel!
+    @IBOutlet var currentWaterLabel: UILabel!
+    
+    var currentWater: Double = 10.0
+    
     var locationManager = CLLocationManager()
     
     var currentLocation: CLLocation?
@@ -83,8 +90,7 @@ class MainController: BaseController, GMSMapViewDelegate {
     
     @IBOutlet weak var mapView: GMSMapView!
     
-    @IBOutlet var currentWaterWidthProportion: NSLayoutConstraint!
-    
+    @IBOutlet var progressWidthConstraint: NSLayoutConstraint!
     
     
     override func viewDidLoad() {
@@ -159,15 +165,37 @@ class MainController: BaseController, GMSMapViewDelegate {
     var currentMarker: GMSMarker?
     
     @objc func water() {
-        self.infoView.updateMultipler(mul: 1.0)
+        
+        guard currentWater > 0 else {
+            self.alert(message: "Bình đã hết nước, vui lòng đi lấy thêm.")
+            return
+        }
+        
         if let currentTree = currentTree {
-            currentTree.currentWater = currentTree.totalWater
-            self.infoView.configure(with: currentTree)
-            if currentTree.type == 0 {
-                currentMarker?.icon = UIImage(named: "ic_tree_green")
+            if currentWater >= (currentTree.totalWater - currentTree.currentWater) {
+                self.infoView.updateMultipler(mul: 1.0)
+                currentWater -= (currentTree.totalWater - currentTree.currentWater)
+                currentTree.currentWater = currentTree.totalWater
+                self.infoView.configure(with: currentTree)
+                if currentTree.type == 0 {
+                    currentMarker?.icon = UIImage(named: "ic_tree_green")
+                } else {
+                    currentMarker?.icon = UIImage(named: "tree\(currentTree.type)_green")
+                }
+                
             } else {
-                currentMarker?.icon = UIImage(named: "tree\(currentTree.type)_green")
+//                self.infoView.updateMultipler(mul: CGFloat((currentTree.currentWater + currentWater) / currentTree.totalWater))
+                
+                currentTree.currentWater += currentWater
+                currentWater = 0
+                self.infoView.configure(with: currentTree)
             }
+            
+            currentWaterLabel.text = "\(currentWater)/10 lít"
+            UIView.animate(withDuration: 1, animations: {
+                self.progressWidthConstraint.constant = CGFloat(self.currentWater * 10)
+            })
+            
         }
     }
     
@@ -182,13 +210,17 @@ class MainController: BaseController, GMSMapViewDelegate {
     }
     
     @objc func nextPath() {
-        if currentIndex < paths.count - 1 {
-            currentIndex += 1
-            drawDirection(mapView: mapView!, pathIndex: currentIndex)
+        if let randomNextTreeIndex = randomNextTree() {
+            let tree = trees[randomNextTreeIndex]
+            self.currentTree = tree
+            self.currentMarker = treeMarkers[randomNextTreeIndex]
+            infoView.configure(with: currentTree!)
+            mapView.selectedMarker = treeMarkers[randomNextTreeIndex]
+            let endLocation = CLLocation(latitude: tree.lat, longitude: tree.lng)
+            guard let currentLocation = self.currentLocation else {return}
+            drawDirection(mapView: mapView, start: currentLocation, destination: endLocation)
         } else {
-            let alert = UIAlertController(title: "Thông báo", message: "Đã tưới xong cây của buổi này", preferredStyle: UIAlertControllerStyle.alert)
-            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
-            self.present(alert, animated: true, completion: nil)
+            alert(message: "Không còn cây nào chưa đủ nước")
         }
         
     }
@@ -288,22 +320,21 @@ class MainController: BaseController, GMSMapViewDelegate {
         self.currentMarker = marker
         self.currentTree = trees[index]
         infoView.configure(with: trees[index])
-//        let tree = trees[index]
-//        var information: String = "Cây đã đủ nước, không cần tưới"
-//        if (tree.needWater) {
-//            information = "\(tree.name) - \(tree.desc) \n Tưới cây này?"
-//        }
-//        let alert = UIAlertController(title: "Xác nhận", message: information, preferredStyle: UIAlertControllerStyle.alert)
-//        if (tree.needWater) {
-//            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { (action) in
-//                marker.icon = UIImage(named: "ic_tree_green")!
-//            }))
-//            alert.addAction(UIAlertAction(title: "Huỷ", style: UIAlertActionStyle.cancel, handler: nil))
-//        } else {
-//            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
-//        }
-//        self.present(alert, animated: true, completion: nil)
         return true
+    }
+    
+    func randomNextTree() -> Int?{
+        let treesNeedWater = trees.filter { (tree) -> Bool in
+            return tree.currentWater < tree.totalWater
+        }
+        let random = Int(arc4random_uniform(UInt32(treesNeedWater.count)))
+        let tree = treesNeedWater[random]
+        for (index, t) in trees.enumerated() {
+            if tree.name == t.name {
+                return index
+            }
+        }
+        return nil
     }
     
     
