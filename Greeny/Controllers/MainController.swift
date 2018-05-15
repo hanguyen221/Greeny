@@ -40,15 +40,15 @@ class MainController: BaseController, GMSMapViewDelegate {
         (0, 8, 9),
         (0, 9, 3),
         (0, 3, 5),
-//        (2, 8, 0),
-//        (1, 0, 2),
-//        (0, 2, 0),
-//        (2, 0, 1),
-//        (1, 1, 6),
-//        (0, 6, 7),
-//        (0, 7, 3),
-//        (2, 3, 1),
-//        (1, 1, 1)
+        (2, 5, 0),
+        (1, 0, 2),
+        (0, 2, 0),
+        (2, 0, 1),
+        (1, 1, 6),
+        (0, 6, 7),
+        (0, 7, 3),
+        (2, 3, 1),
+        (1, 1, 0)
     ]
     
     var currentIndex = 0
@@ -123,6 +123,11 @@ class MainController: BaseController, GMSMapViewDelegate {
         mapView?.delegate = self
         mapView?.isMyLocationEnabled = true
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = true
     }
     
     func setupHamburgerButton() {
