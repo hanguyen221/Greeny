@@ -140,6 +140,9 @@ class SideMenuRootController: BaseController, UITableViewDelegate, UITableViewDa
             gotoScheduleRegisterController()
         } else if index == 1 {
             gotoWaterHistoryController()
+        } else if index == 2 {
+            let settingsController = SettingsController()
+            navigationController?.pushViewController(settingsController, animated: true)
         }
         
     }

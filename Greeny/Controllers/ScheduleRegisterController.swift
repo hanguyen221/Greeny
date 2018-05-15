@@ -19,7 +19,7 @@ class ScheduleRegisterController: UIViewController, CVCalendarViewDelegate, CVCa
         super.viewDidLoad()
         
         navigationController?.navigationBar.isHidden = false
-        navigationItem.title = "Schedule"
+        navigationItem.title = "Đăng kí lịch nghỉ"
         
         calendarMenuView.dayOfWeekTextColor = .white
         calendarMenuView.dayofWeekBackgroundColor = .white
