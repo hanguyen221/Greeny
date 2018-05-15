@@ -16,6 +16,8 @@ class MainController: BaseController, GMSMapViewDelegate {
     
     var locationManager = CLLocationManager()
     
+    var currentLocation: CLLocation?
+    
     let tree_1 = ModelTree(type: 1, name: "Cây 1", lat: 21.006274, lng: 105.842803, totalWater: 5, currentWater: 2)
     let tree_2 = ModelTree(type: 3, name: "Cây 2", lat: 21.006985, lng: 105.844005, totalWater: 5, currentWater: 5)
     let tree_3 = ModelTree(type: 4, name: "Cây 3", lat: 21.005678, lng: 105.8411293, totalWater: 6, currentWater: 1)
@@ -89,6 +91,7 @@ class MainController: BaseController, GMSMapViewDelegate {
         super.viewDidLoad()
         navigationController?.navigationBar.isHidden = true
         
+        locationManager.delegate = self
         let loginVC = LoginController()
         present(loginVC, animated: false, completion: nil)
         
@@ -117,6 +120,7 @@ class MainController: BaseController, GMSMapViewDelegate {
         setupMarkers(with: mapView!)
         initDirections(mapView: mapView!)
         mapView.animate(to: camera)
+        self.locationManager.startUpdatingLocation()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -151,16 +155,20 @@ class MainController: BaseController, GMSMapViewDelegate {
     
     var isWatering = false
     
+    var currentTree: ModelTree?
+    var currentMarker: GMSMarker?
+    
     @objc func water() {
-        isWatering = true
-        
-//        while isWatering {
-//            let multipler = self.infoView.progressConstraint.multiplier
-//            self.infoView.progressConstraint = self.infoView.progressConstraint.setMultiplier(multiplier: multipler + 0.05)
-//            self.infoView.layoutIfNeeded()
-//        }
-        
-        
+        self.infoView.updateMultipler(mul: 1.0)
+        if let currentTree = currentTree {
+            currentTree.currentWater = currentTree.totalWater
+            self.infoView.configure(with: currentTree)
+            if currentTree.type == 0 {
+                currentMarker?.icon = UIImage(named: "ic_tree_green")
+            } else {
+                currentMarker?.icon = UIImage(named: "tree\(currentTree.type)_green")
+            }
+        }
     }
     
     @objc func showSideMenu() {
@@ -262,7 +270,12 @@ class MainController: BaseController, GMSMapViewDelegate {
         }
         let startLoc = CLLocation(latitude: startObj!.lat, longitude: startObj!.lng)
         let endLoc = CLLocation(latitude: endObj!.lat, longitude: endObj!.lng)
-        drawDirection(mapView: mapView, start: startLoc, destination: endLoc)
+        
+        guard let currentLocation = self.currentLocation else {return}
+        
+        drawDirection(mapView: mapView, start: currentLocation, destination: endLoc)
+//        drawDirection(mapView: mapView, start: startLoc, destination: endLoc)
+        
         let camera = GMSCameraPosition.camera(withLatitude: endObj!.lat, longitude: endObj!.lng , zoom: 17)
         mapView.animate(to: camera)
     }
@@ -272,7 +285,8 @@ class MainController: BaseController, GMSMapViewDelegate {
         guard let index = treeMarkers.index(of: marker) else {
             return false
         }
-        
+        self.currentMarker = marker
+        self.currentTree = trees[index]
         infoView.configure(with: trees[index])
 //        let tree = trees[index]
 //        var information: String = "Cây đã đủ nước, không cần tưới"
@@ -292,8 +306,18 @@ class MainController: BaseController, GMSMapViewDelegate {
         return true
     }
     
+    
+    
 }
 
+extension MainController: CLLocationManagerDelegate {
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let location = locations.last else {return}
+        self.currentLocation = location
+    }
+    
+}
 
 
 

@@ -16,6 +16,8 @@ class MarkerInfoView: UIView {
     @IBOutlet var waterNeedLabel: UILabel!
     @IBOutlet var progressConstraint: NSLayoutConstraint!
     
+    var tree: ModelTree?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -35,7 +37,7 @@ class MarkerInfoView: UIView {
     }
     
     func configure(with tree: ModelTree) {
-        
+        self.tree = tree
         UIView.animate(withDuration: 0.5) {
             self.treeNameLabel.text = tree.name
             self.waterNeedLabel.text = "Cần \(tree.totalWater - tree.currentWater) lít"
@@ -51,9 +53,13 @@ class MarkerInfoView: UIView {
             }
             self.layoutIfNeeded()
         }
-        
-        
-        
+    }
+    
+    func updateMultipler(mul: CGFloat) {
+        UIView.animate(withDuration: 1) {
+            self.progressConstraint = self.progressConstraint.setMultiplier(multiplier: mul)
+            self.layoutIfNeeded()
+        }
     }
     
 }
